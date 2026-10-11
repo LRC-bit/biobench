@@ -6555,6 +6555,27 @@ async function restoreTabs() {
 // The scale is recomputed on resize and on orientation change, and once after
 // load — the first computation can land before the canvas has its final size,
 // which would leave 3Dmol drawing at the wrong scale until the next resize.
+//
+// This whole mechanism is now dormant. It earned its keep when the small-screen
+// layout was the desktop three-column layout shrunk to fit: the panels had
+// fixed pixel widths that added up to more than a phone is wide, and the only
+// way to see all of them was to scale the lot down. That layout is gone. The
+// panels are bottom sheets — `left: 0; right: 0; bottom: 0`, capped by a
+// percentage max-height, with the status pill a fixed distance off the bottom
+// edge. Every one of those numbers is already relative to the screen, so
+// scaling them multiplies a layout that was already correct by a number
+// derived from a height it no longer has.
+//
+// What that cost was visible the moment a phone was turned on its side. At
+// 844x390 the scale came out 390/900 = 0.43, so a layout that had correctly
+// reflowed to the full 844px width was shrunk to 366px and marooned in the
+// left half of the screen, with 478px of black beside it and 17px handles.
+// Turning the phone sideways looked like nothing had happened, because
+// nothing had: the same 390px-wide portrait layout, just smaller.
+//
+// The wrapper is still built and still sized, because removing it would mean
+// unwinding the CSS that positions against it — but the transform is left at
+// 1.0 and the layout is left to be what it already is.
 (function scaleToFit() {
   // Below this width the desktop layout is scaled rather than re-flowed. Above
   // it the page is the page and no transform is involved.
@@ -6599,49 +6620,32 @@ async function restoreTabs() {
       return;
     }
     const el = build();
-    // Measure the layout's width from its panels; take the height from a
-    // fixed floor.
+    // The wrapper is given the viewport's box and no transform. See the note
+    // above the IIFE for why the scale is gone and what it cost while it was
+    // here.
     //
-    // The wrapper starts at the viewport's size and its children are all
-    // `position: absolute` — out of flow, so they push neither its scroll size
-    // nor its box. Reading the wrapper tells us about the screen, not about the
-    // layout, and a scale computed from it comes out as 1.0: the panels keep
-    // their desktop pixel sizes and run off the edges of a 390px screen. That
-    // is what put the status pill out of sight.
+    // The height is the viewport's, not a fixed floor. A fixed 900 was right
+    // when the layout was being scaled to fit it — the number had to be
+    // independent of the screen or the anchors would feed back on themselves.
+    // With no scale there is nothing to feed back: `bottom: 22px` resolves
+    // against whatever height the wrapper has, so giving it the screen's own
+    // height puts the status pill 22px off the bottom of the *screen*. Pinning
+    // it at 900 instead put the pill at 878px, which on a 390px-tall landscape
+    // phone is below the fold — the one thing the fixed floor was originally
+    // introduced to prevent.
     //
-    // Width is measured, because it is the axis that actually varies — the
-    // panels' widths are what add up to the layout's extent, and none of them
-    // is anchored to the right edge in a way that feeds back.
-    //
-    // Height is *not* measured, and the reason is a feedback loop. Half the
-    // panels are positioned with `bottom`, so their rect.bottom is a function
-    // of the wrapper's current height. Sizing the wrapper to the measured
-    // bottom moves every `bottom` anchor, the next measurement comes back
-    // smaller, and the layout shrinks a little on every call until the status
-    // pill falls off the bottom of the screen. A fixed floor breaks the loop:
-    // the anchors resolve against a number that does not depend on them.
-    const prev = el.style.transform;
-    el.style.transform = "none";
-    let wantW = 0;
-    for (const child of el.children) {
-      const r = child.getBoundingClientRect();
-      if (r.right > wantW) wantW = r.right;
-    }
-    el.style.width = `${wantW}px`;
-    el.style.height = `${MIN_H}px`;
-    el.style.transform = prev;
-
-    // Both axes, smaller ratio wins: the whole layout stays visible,
-    // letterboxed rather than cropped. A phone in landscape is wider than it
-    // is tall relative to a three-column layout, so height usually binds.
-    const scale = Math.min(window.innerWidth / wantW,
-                           window.innerHeight / MIN_H);
-    el.style.transform = `scale(${scale})`;
-    // The wrapper is now the layout's size, which is larger than the screen,
-    // so the body would scroll the unscaled layout into view. Hidden: the
-    // scaled result is what should be on screen and nothing more.
+    // The sheets' percentage max-heights resolve against the same number, so
+    // they become a share of the screen rather than of an imaginary taller
+    // one: 72% of 390 is 281px in landscape, 72% of 844 is 608px in portrait.
+    // Both are the right answer for their screen.
+    el.style.width = `${window.innerWidth}px`;
+    el.style.height = `${window.innerHeight}px`;
+    el.style.transform = "scale(1)";
+    // The wrapper is the layout's size, which is larger than the screen, so
+    // the body would scroll the unscaled layout into view. Hidden: the layout
+    // is what should be on screen and nothing more.
     document.body.style.overflow = "hidden";
-    // 3Dmol sized its canvas from the container before the transform existed.
+    // 3Dmol sized its canvas from the container before any of this existed.
     // A transform does not change the layout box, so the canvas is still the
     // right size and the GPU scales it — which is exactly what is wanted, and
     // why there is no resize call here.
