@@ -169,42 +169,6 @@
   .ctl.icon svg { width: 15px; height: 15px; fill: var(--muted); }
   .ctl.icon:hover svg { fill: var(--text); }
 
-  /* ---------- structure label ---------- */
-  #structure-label {
-    position: absolute;
-    top: 14px; left: 16px;
-    /* Above #left-col (z-index 10) so the switcher menu can open over the
-       metrics and sequence panels. */
-    z-index: 40;
-    background: rgba(11,15,20,.55);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 6px 12px;
-    font-size: 13px;
-    color: var(--muted);
-    display: none;
-    backdrop-filter: blur(8px);
-    /* A generated structure name can be long — "nk2r_mutant_8to22" plus a
-       source tag. Without a cap the box grows until it runs under the
-       control bar at the top centre, and the name breaks mid-word where the
-       two overlap. Cap it, ellipsize, and let the title attribute carry the
-       full text.
-
-       Flex, with the switcher pinned and only the text allowed to shrink.
-       The switcher is a child of this box, and with plain inline layout a
-       long name pushes it out past max-width where overflow:hidden clips it
-       — the button keeps its tooltip, so it still looks clickable, but the
-       click lands on nothing. flex-shrink:0 on the switcher and the
-       ellipsis on the text keep the button on screen at any name length. */
-    max-width: min(46vw, 420px);
-    display: none;
-    align-items: center;
-    gap: 6px;
-  }
-  #structure-label.show { display: flex; }
-  /* The text and the source tag share one shrinking box, so the ellipsis
-     falls on whichever of them is longest. */
-  #structure-label .src { color: var(--accent); flex-shrink: 0; }
 
 
   /* ---------- metrics panel ---------- */
@@ -272,8 +236,8 @@
   #left-col { max-height: 72%; overflow-y: auto; }
   #agent-panel { max-height: 78%; }
 
-  /* The handles. Top of the screen, beside the structure name: that is where
-     the user is already looking, and the bottom is where the sheets appear —
+  /* The handles. Top of the screen, in the two corners: the topbar is centred
+     and leaves both edges free, and the bottom is where the sheets appear —
      a handle down there would be covered by the thing it opens. */
   #left-handle, #agent-handle {
     position: absolute;
@@ -281,6 +245,10 @@
     z-index: 22;
     width: 40px;
     height: 40px;
+    /* Hidden by default and shown by the script on a small screen. The
+       `display` here is the desktop value — the script sets `hidden`, and
+       `[hidden]` only adds a second lock on a door that is already shut.
+       Without this rule the handles would never appear at all. */
     display: none;
     align-items: center;
     justify-content: center;
@@ -292,6 +260,8 @@
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
   }
+  /* Shown only where the script has cleared `hidden` — a small screen. */
+  #left-handle:not([hidden]), #agent-handle:not([hidden]) { display: flex; }
   #left-handle { left: 12px; }
   #agent-handle { right: 12px; }
   #left-handle[hidden], #agent-handle[hidden] { display: none; }
@@ -1629,106 +1599,6 @@
     color: var(--muted);
   }
 
-  /* ---------- structure switcher ---------- */
-  /* One entry per structure the viewer has loaded this session, so results
-     from different runs stay available instead of replacing each other.
-   *
-   * A dropdown rather than a row of tabs: a row of four or more runs the
-   * width of the viewer and pushes the top controls around. The dropdown
-   * lives inside the structure label at the top left, next to the name of
-   * what is on screen. */
-  /* Static, not relative: the menu is positioned against #structure-label
-     so it opens flush with the label's left edge instead of hanging off
-     the button, which sits to the right of the structure name. */
-  #struct-switcher {
-    display: none;
-    /* Never shrink. The label is a flex row capped at max-width, and this is
-       the one child that must stay its full size — a clipped button still
-       shows its tooltip and still looks clickable. */
-    flex-shrink: 0;
-    /* The label is 13px text with 6px of vertical padding; the icon button
-       is 32px tall, so it needs a small negative margin to sit on the same
-       optical line as the name instead of stretching the label. */
-    margin: -3px 2px -3px 0;
-    vertical-align: middle;
-  }
-  #struct-switcher.show { display: inline-block; }
-  /* The structure name, in its own box so the ellipsis has something to
-     apply to. A bare text node in a flex container cannot be ellipsized —
-     it just overflows and takes the switcher with it. */
-  #structure-label .st-name {
-    min-width: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-  #struct-switcher > button {
-    flex-shrink: 0;
-    /* .ctl.icon is sized for the top control bar; scale it down to sit
-       beside 13px label text. */
-    width: 22px; height: 22px;
-    padding: 4px;
-    border-radius: 5px;
-  }
-  #struct-switcher > button svg { width: 13px; height: 13px; }
-  #struct-switcher .sw-menu {
-    position: absolute;
-    /* Anchored to #structure-label (the nearest positioned ancestor), so
-       the menu's left edge lines up with the label's left edge. */
-    top: calc(100% + 5px);
-    left: 0;
-    min-width: 230px;
-    background: rgba(19,26,34,.78);
-    border: 1px solid rgba(34,48,64,.9);
-    border-radius: 10px;
-    padding: 5px;
-    box-shadow: 0 10px 32px rgba(0,0,0,.5);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    z-index: 30;
-  }
-  #struct-switcher .sw-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 8px;
-    border-radius: 7px;
-    font-size: 12px;
-    color: var(--muted);
-    cursor: pointer;
-  }
-  #struct-switcher .sw-row:hover { background: rgba(77,163,255,.12); color: var(--text); }
-  #struct-switcher .sw-row.on { color: var(--text); background: rgba(77,163,255,.16); }
-  #struct-switcher .sw-row .sw-name { flex: 1; }
-  #struct-switcher .sw-row .sw-src { color: var(--accent); font-size: 10px; }
-  #struct-switcher .sw-row .sw-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  /* A task heading above the structures it produced. Small caps rather
-     than a coloured bar: the rows below already carry a dot for the active
-     one, and a second visual language would compete with it. */
-  #struct-switcher .sw-group {
-    padding: 7px 9px 3px;
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: .07em;
-    color: var(--muted);
-    opacity: .75;
-  }
-  #struct-switcher .sw-group:first-child { padding-top: 3px; }
-  #struct-switcher .sw-close {
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1;
-    cursor: pointer;
-    padding: 0 3px;
-    border-radius: 50%;
-  }
-  #struct-switcher .sw-close:hover { color: var(--err); }
 </style>
 </head>
 <body>
@@ -1781,8 +1651,6 @@
   </div>
 </div>
 
-
-<div id="structure-label"><span id="struct-switcher"></span></div>
 
 <!-- Two handles for the two panels, both of which live at the bottom of the
      screen when open.
@@ -2299,11 +2167,6 @@ if (!webglAvailable()) {
 }
 
 const hint = document.getElementById("viewer-hint");
-const label = document.getElementById("structure-label");
-// The structure switcher lives inside the label, so it is grabbed here
-// alongside it rather than down with the tab code — renderStructure runs
-// before that point and would otherwise hit the temporal dead zone.
-const switcher = document.getElementById("struct-switcher");
 const metricsPanel = document.getElementById("metrics");
 const metricsRows = document.getElementById("metrics-rows");
 const metricsNotes = document.getElementById("metrics-notes");
@@ -2835,40 +2698,6 @@ function renderStructure(data, meta, snap) {
   viewer.render();
 
   hint.classList.add("hidden");
-  // Clear only the text and the source tag, not the children — the structure
-  // switcher lives in this element and innerHTML="" would drop it on every
-  // render.
-  [...label.childNodes].forEach(n => {
-    if (n.nodeType === Node.TEXT_NODE) n.remove();
-    if (n.nodeType === Node.ELEMENT_NODE
-        && (n.classList.contains("src") || n.classList.contains("st-name"))) {
-      n.remove();
-    }
-  });
-  // The switcher goes first so the button sits at the label's left edge,
-  // with the structure name and source following it.
-  //
-  // The name goes in a span of its own. The label is a flex row capped at
-  // max-width, and a bare text node cannot be ellipsized in one — it
-  // overflows instead, and the overflow pushes the switcher out of the box
-  // where overflow:hidden clips it. The button keeps its tooltip and still
-  // looks clickable, but the click lands on nothing.
-  const name = document.createElement("span");
-  name.className = "st-name";
-  name.textContent = meta.name || "structure";
-  label.insertBefore(name, switcher.nextSibling);
-  if (meta.source) {
-    const src = document.createElement("span");
-    src.className = "src";
-    src.textContent = `  ·  ${meta.source}`;
-    label.appendChild(src);
-  }
-  // The label ellipsizes when the name is long, so the full text goes in the
-  // tooltip — otherwise a truncated name is all the user ever sees.
-  const fullName = (meta.name || "structure") +
-                   (meta.source ? `  ·  ${meta.source}` : "");
-  label.title = fullName;
-  label.classList.add("show");
 
   // The view is always the whole complex; per-chain control lives in the
   // sequence panel's eye toggles.
@@ -5701,7 +5530,6 @@ function showEmptyState() {
   state.meta = {};
   state.selection = {};
   state.hiddenChains = new Set();
-  label.classList.remove("show");
   hint.classList.remove("hidden");
   // The panels describe a structure that is no longer there.
   document.getElementById("metrics-rows").replaceChildren();
@@ -5979,116 +5807,23 @@ async function tabText(t) {
   return t.text;
 }
 
-// The switcher is a button plus a menu that opens on click. The button
-// shows how many structures are open; the menu lists them with the active
-// one marked, and each row can be closed.
-function renderTabs() {
-  switcher.innerHTML = "";
-  if (state.tabs.length < 2) {
-    // A single structure needs no switcher; the label already names it.
-    switcher.classList.remove("show");
-    return;
-  }
-  switcher.classList.add("show");
-
-  const btn = document.createElement("button");
-  btn.type = "button";
-  // A bare chevron, matching the icon buttons in the top control bar. The
-  // count is dropped: the menu already lists every open structure, and the
-  // number made the button read as a badge rather than a control.
-  btn.className = "ctl icon";
-  btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>`;
-  btn.title = `Switch structure (${state.tabs.length} open)`;
-  btn.addEventListener("click", ev => {
-    ev.stopPropagation();
-    toggleSwitcherMenu();
-  });
-  switcher.appendChild(btn);
-
-  const menu = document.createElement("div");
-  menu.className = "sw-menu";
-  menu.hidden = true;
-
-  // Grouped by the task that produced each structure. A task's results
-  // belong together — the point of the grouping is that clicking a finished
-  // task in the status menu reaches everything it made, not just the last
-  // publish. Structures with no task (a manual publish, an RCSB fetch) sit
-  // under a plain heading rather than being hidden.
-  const groups = [];
-  const byJob = {};
-  state.tabs.forEach((t, i) => {
-    const job = t.meta.job || "";
-    if (!byJob[job]) {
-      byJob[job] = [];
-      groups.push(job);
-    }
-    byJob[job].push([t, i]);
-  });
-
-  groups.forEach(job => {
-    if (job) {
-      const head = document.createElement("div");
-      head.className = "sw-group";
-      head.textContent = job;
-      menu.appendChild(head);
-    }
-    byJob[job].forEach(([t, i]) => {
-      const row = document.createElement("div");
-      row.className = "sw-row" + (i === state.activeTab ? " on" : "");
-
-      const dot = document.createElement("span");
-      dot.className = "sw-dot";
-      dot.style.background = i === state.activeTab ? "var(--accent)" : "transparent";
-      row.appendChild(dot);
-
-      const name = document.createElement("span");
-      name.className = "sw-name";
-      name.textContent = t.meta.name || "structure";
-      row.appendChild(name);
-
-      if (t.meta.source) {
-        const src = document.createElement("span");
-        src.className = "sw-src";
-        src.textContent = t.meta.source;
-        row.appendChild(src);
-      }
-
-      const close = document.createElement("button");
-      close.className = "sw-close";
-      close.textContent = "×";
-      close.title = "Close";
-      close.addEventListener("click", ev => {
-        ev.stopPropagation();
-        closeTab(i);
-      });
-      row.appendChild(close);
-
-      row.addEventListener("click", ev => {
-        ev.stopPropagation();
-        switchTab(i);
-        closeSwitcherMenu();
-      });
-      menu.appendChild(row);
-    });
-  });
-  switcher.appendChild(menu);
-}
-
-function toggleSwitcherMenu() {
-  const menu = switcher.querySelector(".sw-menu");
-  if (!menu) return;
-  menu.hidden = !menu.hidden;
-}
-
-function closeSwitcherMenu() {
-  const menu = switcher.querySelector(".sw-menu");
-  if (menu) menu.hidden = true;
-}
-
-// A click anywhere else closes the menu, the way any dropdown behaves.
-document.addEventListener("click", ev => {
-  if (!switcher.contains(ev.target)) closeSwitcherMenu();
-});
+// The structure switcher is gone. It was a button plus a menu that listed
+// every open structure, and it lived in the label at the top left — the one
+// piece of chrome that survived from the desktop layout onto a phone, where
+// it cost the corner the handles now use and named a structure the user is
+// already looking at.
+//
+// The tabs themselves are not gone: the poll still opens one per publish and
+// switchTab still moves between them. What is gone is the control for doing
+// it by hand. With one structure open there was nothing to switch to, and
+// with several the newest publish takes the screen on its own — which is the
+// case the switcher existed for.
+//
+// renderTabs is kept as a no-op rather than deleted because four call sites
+// invoke it after mutating the tab list, and each of them would otherwise
+// throw. A function that does nothing is the honest version of a control
+// whose job is finished.
+function renderTabs() {}
 
 async function closeTab(i, alreadyDeleted = false) {
   if (i < 0 || i >= state.tabs.length) return;
