@@ -1,0 +1,108 @@
+{
+  "name": "1ru7_f8_cycpep",
+  "source": "boltzgen",
+  "format": "pdb",
+  "chains": [
+    {
+      "id": "A",
+      "residues": 323,
+      "role": "HA1"
+    },
+    {
+      "id": "B",
+      "residues": 160,
+      "role": "HA2"
+    },
+    {
+      "id": "C",
+      "residues": 323,
+      "role": "HA1"
+    },
+    {
+      "id": "D",
+      "residues": 160,
+      "role": "HA2"
+    },
+    {
+      "id": "E",
+      "residues": 323,
+      "role": "HA1"
+    },
+    {
+      "id": "F",
+      "residues": 159,
+      "role": "HA2"
+    },
+    {
+      "id": "P",
+      "residues": 8,
+      "role": "cyclic_peptide"
+    }
+  ],
+  "metrics": {
+    "designs": {
+      "label": "\u8bbe\u8ba1\u6570",
+      "value": 10
+    },
+    "sequence": {
+      "label": "\u5e8f\u5217",
+      "value": "PRO-ASN-SER-THR-GLY-SER-GLY-ASN"
+    },
+    "ipTM": {
+      "label": "\u754c\u9762 TM-score",
+      "value": 0.295,
+      "hint": ">0.7 \u4e3a\u597d\uff0c\u5f53\u524d\u4e2d\u7b49"
+    },
+    "pLDDT": {
+      "label": "\u590d\u5408\u7269 pLDDT",
+      "value": 0.627,
+      "hint": "0-1"
+    },
+    "hbonds": {
+      "label": "\u6c22\u952e\u6570",
+      "value": 4
+    },
+    "ring_bond_A": {
+      "label": "\u6210\u73af\u952e N-C",
+      "value": 1.3,
+      "hint": "\u00c5\uff0c\u5df2\u95ed\u5408"
+    }
+  },
+  "notes": "\u5728\u9009\u4e2d\u7684 6 \u4e2a\u70ed\u70b9\uff08HA2 \u94fe F:578/579/581/582/585/586\uff0c\u9178\u6027-\u9170\u80fa\u754c\u9762\u6591\u5757\uff09\u5468\u56f4\u7528 BoltzGen \u8bbe\u8ba1 10 \u4e2a 8aa \u73af\u80bd\uff08cyclic: true\uff0cpeptide-anything\uff0c\u88c1\u526a\u4e0a\u4e0b\u6587 15 \u00c5/108 \u6b8b\u57fa\uff0c\u5b9e\u9645\u751f\u6210 16 \u4e2a\uff09\u3002\u53d1\u5e03\u7684\u662f\u6392\u540d\u7b2c 2 \u7684 design_15\uff08PNSTGSGN\uff09\uff1a\u6392\u540d\u7b2c 1 \u7684 design_14 \u867d ipTM \u7565\u9ad8\uff080.325\uff09\u4f46\u7ed3\u6784\u635f\u574f\u2014\u2014\u6210\u73af\u952e 1.69 \u00c5 \u672a\u771f\u6b63\u95ed\u5408\u3001\u4e14\u6709 SER2 O..ILE4 N 0.86 \u00c5 \u7684\u539f\u5b50\u91cd\u53e0\uff0c\u6545\u4e0d\u53d1\u5e03\u3002design_15 \u7684\u6210\u73af\u952e 1.30 \u00c5\u3001\u80bd\u5185\u6700\u5c0f\u63a5\u89e6 2.12 \u00c5\uff0c\u7ed3\u6784\u5e72\u51c0\u3002\u653e\u7f6e\u7ecf\u5750\u6807\u4e00\u81f4\u6027\u9a8c\u8bc1\uff1a\u8bbe\u8ba1\u8f93\u51fa\u6574\u4f53\u5728\u53e6\u4e00\u5750\u6807\u6846\u67b6\uff0c\u4ee5\u70ed\u70b9\u6240\u5728\u94fe\uff08\u8bbe\u8ba1\u94fe F -> \u76ee\u6807\u94fe F\uff0c287 \u4e2a\u5171\u4eab\u91cd\u539f\u5b50\u3001\u53e0\u52a0 RMSD 2.05 \u00c5\uff09\u951a\u5b9a\u540e\uff0c5 \u6761\u4e0a\u4e0b\u6587\u94fe\u5168\u90e8\u843d\u5728\u6b63\u786e\u5bf9\u5e94\u94fe\u4e0a\uff08F 1.43/D 1.57/B 3.02/A 6.29/E 8.58 \u00c5\uff0c\u4e0e\u6b21\u4f18\u5019\u9009\u5dee 12-15 \u00c5\uff09\uff0c\u653e\u7f6e\u65e0\u8bef\u3002\u80bd\u7ed3\u5408\u5728\u539f\u4f53\u754c\u9762\u6c9f\u69fd\uff0c\u6700\u8fd1\u63a5\u89e6\u5728\u76f8\u90bb\u539f\u4f53\u4e0a\u8be5\u6591\u5757\u7684\u526f\u672c\uff1aD:ASN579 1.5\u3001D:ASN582 1.8\u3001D:ASP586 2.1\u3001F:THR564 1.6\u3001F:LYS568 2.4 \u00c5\uff08\u6240\u9009 F \u94fe\u526f\u672c\u8ddd\u80bd\u7ea6 10 \u00c5 \u4ee5\u4e0a\uff09\u3002\u4e24\u5904 WARN \u7ea7\u7d27\u7ef7\u63a5\u89e6\uff1aD:ASN579 CB..P:THR4 CG2 2.17 \u00c5\u3001F:THR564 OG1..P:SER6 OG 1.93 \u00c5\u3002ipTM 0.295 \u5c5e\u4e2d\u7b49\u7f6e\u4fe1\uff1b\u8be5\u7ed3\u6784\u4e3a\u88c1\u526a\u4e0a\u4e0b\u6587\u4e0a\u7684\u8bbe\u8ba1\u91cd\u5efa\u5230\u5b8c\u6574\u4e09\u805a\u4f53\uff0c\u975e\u5bf9\u63a5\u6253\u5206\uff0c\u4e0d\u80fd\u4e0e Vina \u4eb2\u548c\u529b\u6bd4\u8f83\u3002",
+  "updated": "2026-10-11T02:52:48Z",
+  "job": "f8_cycpep",
+  "highlight": [
+    {
+      "chain": "P",
+      "resi": 1
+    },
+    {
+      "chain": "P",
+      "resi": 2
+    },
+    {
+      "chain": "P",
+      "resi": 3
+    },
+    {
+      "chain": "P",
+      "resi": 4
+    },
+    {
+      "chain": "P",
+      "resi": 5
+    },
+    {
+      "chain": "P",
+      "resi": 6
+    },
+    {
+      "chain": "P",
+      "resi": 7
+    },
+    {
+      "chain": "P",
+      "resi": 8
+    }
+  ]
+}

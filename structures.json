@@ -1,0 +1,1561 @@
+[
+  {
+    "name": "1ru7_pockets",
+    "file": "structures/1ru7_pockets.pdb",
+    "meta": {
+      "name": "1ru7_pockets",
+      "source": "fpocket",
+      "format": "pdb",
+      "chains": [
+        {
+          "id": "A",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "B",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "C",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "D",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "E",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "F",
+          "residues": 159,
+          "role": "HA2"
+        },
+        {
+          "id": "P",
+          "residues": 12,
+          "role": "cyclic_peptide"
+        },
+        {
+          "id": "p",
+          "residues": 1,
+          "ligand": true,
+          "role": "pocket_1"
+        },
+        {
+          "id": "q",
+          "residues": 1,
+          "ligand": true,
+          "role": "pocket_2"
+        },
+        {
+          "id": "r",
+          "residues": 1,
+          "ligand": true,
+          "role": "pocket_3"
+        }
+      ],
+      "metrics": {
+        "pockets_found": {
+          "label": "\u53d1\u73b0\u53e3\u888b\u6570(>=200A^3)",
+          "value": 86
+        },
+        "best_score": {
+          "label": "\u6700\u4f73\u836f\u7269\u76f8\u4f3c\u5ea6",
+          "value": 0.645
+        },
+        "best_volume": {
+          "label": "\u6700\u4f73\u53e3\u888b\u4f53\u79ef",
+          "value": 395,
+          "hint": "A^3"
+        },
+        "top3": {
+          "label": "\u5df2\u53d1\u5e03\u53e3\u888b",
+          "value": "88 / 70 / 99"
+        }
+      },
+      "notes": "fpocket \u5168\u590d\u5408\u7269\u641c\u7d22\uff1a86 \u4e2a\u53e3\u888b >=200 A^3\uff0c\u6309 drug_score \u53d6\u524d 3 \u53d1\u5e03\uff08p=\u53e3\u888b88\uff0cq=\u53e3\u888b70\uff0cr=\u53e3\u888b99\uff09\u3002\u53e3\u888b88(0.645, 395 A^3)\u4f4d\u4e8e HA1(A)/HA2(F) \u8de8\u539f\u4f53\u754c\u9762\uff0c\u5185\u58c1 A:233Y-236W/L\uff1b\u53e3\u888b70(0.605, 382 A^3)\u662f\u540c\u4e00\u754c\u9762\u5728 B/C \u539f\u4f53\u5bf9\u7684\u5bf9\u5e94\u4f4d\u70b9\uff1b\u53e3\u888b99(0.186, 1555 A^3)\u8ddd\u73af\u80bd\u7ea620 A\uff0c\u5185\u58c1\u542b F:537-543 \u4e0e\u76f8\u90bb\u539f\u4f53\u878d\u5408\u80bd D:501-509\u3002\u73af\u80bd\u81ea\u8eab\u7ed3\u5408\u4f4d\u70b9(F542\u53e3\u888b)\u5df2\u88ab\u80bd\u5360\u636e\uff0cfpocket \u4e0d\u5c06\u5176\u62a5\u544a\u4e3a\u7a7a\u8154\u3002",
+      "updated": "2026-09-28T10:27:36Z",
+      "job": "1ru7_pockets",
+      "highlight": [
+        {
+          "chain": "[{\"chain\"",
+          "resi": "\"A\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "233}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"A\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "234}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"A\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "236}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"A\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "209}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"F\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "572}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"F\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "573}]"
+        }
+      ]
+    }
+  },
+  {
+    "name": "1ru7_pocketr_designs",
+    "file": "structures/1ru7_pocketr_designs.cif",
+    "meta": {
+      "name": "1ru7_pocketr_designs",
+      "source": "resgen",
+      "format": "cif",
+      "chains": [
+        {
+          "id": "A",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "B",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "C",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "D",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "E",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "F",
+          "residues": 159,
+          "role": "HA2"
+        },
+        {
+          "id": "P",
+          "residues": 12,
+          "role": "cyclic_peptide"
+        },
+        {
+          "id": "ra",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_1"
+        },
+        {
+          "id": "rb",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_2"
+        },
+        {
+          "id": "rc",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_3"
+        },
+        {
+          "id": "rd",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_4"
+        },
+        {
+          "id": "re",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_5"
+        },
+        {
+          "id": "rf",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_6"
+        },
+        {
+          "id": "rg",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_7"
+        },
+        {
+          "id": "rh",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_8"
+        },
+        {
+          "id": "ri",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_9"
+        },
+        {
+          "id": "rj",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_10"
+        }
+      ],
+      "metrics": {
+        "molecules_generated": {
+          "label": "\u751f\u6210\u5206\u5b50\u6570",
+          "value": 10
+        },
+        "pocket_residues": {
+          "label": "\u53e3\u888b\u6b8b\u57fa(10A\u5185)",
+          "value": 27
+        },
+        "focal_threshold": {
+          "label": "\u751f\u957f\u9608\u503c",
+          "value": 0.75,
+          "hint": "\u9ed8\u8ba40.5\uff0c\u5df2\u63d0\u9ad8\u4ee5\u5f97\u5230\u836f\u7269\u5927\u5c0f\u5206\u5b50"
+        },
+        "beam_size": {
+          "label": "\u675f\u641c\u7d22\u5bbd\u5ea6",
+          "value": 20
+        },
+        "heavy_atoms": {
+          "label": "\u91cd\u539f\u5b50\u6570\u8303\u56f4",
+          "value": "9-14"
+        }
+      },
+      "notes": "ResGen \u4e3a\u53e3\u888b r\uff08fpocket 99 \u53f7\u8154\uff0c\u8d28\u5fc3 53.1,64.1,147.3\uff0c10 A \u76d2\u754c\u5b9a 27 \u4e2a\u6b8b\u57fa\uff09\u751f\u6210 10 \u4e2a\u5206\u5b50\uff0cfocal_threshold \u63d0\u9ad8\u5230 0.75\uff08\u9ed8\u8ba4 0.5\uff09\u4ee5\u83b7\u5f97\u836f\u7269\u5927\u5c0f\u7684\u4ea7\u7269\u3002\u5316\u5b66\u7279\u5f81\uff1a\u5168\u90e8\u4e3a\u82b3\u9999\u6838\uff08\u8418/\u5e76\u4e09\u82ef\u578b\u53cc\u73af\u3001\u4e09\u73af\u4f53\u7cfb\uff09\u914d OH/NH2/COOH/OMe \u53d6\u4ee3\u57fa\uff0c\u91cd\u539f\u5b50 9-14 \u4e2a\u2014\u2014\u53e3\u888b\u5185\u58c1\u5bcc\u82b3\u9999\uff08F:537-543\u3001D:501-511 \u878d\u5408\u80bd\u533a\u3001F:614-638\uff09\u4e0e\u758f\u6c34 Phe \u6b8b\u57fa\uff0c\u6a21\u578b\u7ed9\u51fa\u4e86\u5e73\u9762\u82b3\u9999\u52a0\u6781\u6027\u5934\u57fa\u7684\u7ec4\u5408\u3002\u53c2\u8003\u914d\u4f53\u4ec5\u7528\u4e8e\u5b9a\u5fc3\uff0c\u751f\u6210\u5206\u5b50\u4e0d\u53d7\u5176\u7ea6\u675f\u3002\u5efa\u8bae\uff1a\u6311 3-5 \u4e2a\u7528 molecular-docking \u5bf9\u53d7\u4f53\u505a\u5bf9\u63a5\u9a8c\u8bc1\uff0c\u5e76\u7528 admet-prediction \u8bc4\u4f30\u6210\u836f\u6027\u3002",
+      "updated": "2026-09-28T10:30:40Z",
+      "job": "1ru7_pocket_r",
+      "highlight": [
+        {
+          "chain": "[{\"chain\"",
+          "resi": "\"D\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "503}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"D\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "504}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"D\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "505}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"D\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "508}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"D\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "509}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"D\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "510}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"D\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "511}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"D\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "616}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"D\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "619}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"D\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "620}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"D\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "623}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"D\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "632}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"D\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "633}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"D\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "634}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"D\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "635}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"D\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "636}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"F\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "614}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"F\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "615}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"F\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "616}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"F\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "617}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"F\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "618}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"F\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "619}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"F\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "620}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"F\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "621}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"F\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "622}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"F\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "623}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"F\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "624}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"F\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "625}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"F\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "626}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"F\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "627}"
+        },
+        {
+          "chain": "{\"chain\"",
+          "resi": "\"F\""
+        },
+        {
+          "chain": "\"resi\"",
+          "resi": "638}]"
+        }
+      ]
+    }
+  },
+  {
+    "name": "1ru7_ra_benzene",
+    "file": "structures/1ru7_ra_benzene.cif",
+    "meta": {
+      "name": "1ru7_ra_benzene",
+      "source": "molecule-editing",
+      "format": "cif",
+      "chains": [
+        {
+          "id": "A",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "B",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "C",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "D",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "E",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "F",
+          "residues": 159,
+          "role": "HA2"
+        },
+        {
+          "id": "P",
+          "residues": 12,
+          "role": "cyclic_peptide"
+        },
+        {
+          "id": "ra",
+          "residues": 1,
+          "ligand": true,
+          "role": "edited_ligand"
+        },
+        {
+          "id": "rb",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_2"
+        },
+        {
+          "id": "rc",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_3"
+        },
+        {
+          "id": "rd",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_4"
+        },
+        {
+          "id": "re",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_5"
+        },
+        {
+          "id": "rf",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_6"
+        },
+        {
+          "id": "rg",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_7"
+        },
+        {
+          "id": "rh",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_8"
+        },
+        {
+          "id": "ri",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_9"
+        },
+        {
+          "id": "rj",
+          "residues": 1,
+          "ligand": true,
+          "role": "gen_10"
+        }
+      ],
+      "metrics": {
+        "bond_to_attachment_A": {
+          "label": "\u8fde\u63a5\u952e\u957f\uff08O\u2013C\uff09",
+          "value": 1.42,
+          "hint": "\u00c5"
+        },
+        "ring_cc_A": {
+          "label": "\u73af\u5185 C-C",
+          "value": 1.395,
+          "hint": "\u00c5"
+        },
+        "ring_ch_A": {
+          "label": "\u73af\u5185 C-H",
+          "value": 1.09,
+          "hint": "\u00c5"
+        },
+        "ringC_protein_A": {
+          "label": "\u73af\u78b3\u8ddd\u86cb\u767d",
+          "value": 3.0,
+          "hint": "\u00c5"
+        },
+        "min_protein_dist_A": {
+          "label": "\u65b0\u539f\u5b50\u8ddd\u86cb\u767d\u6700\u8fd1",
+          "value": 2.34,
+          "hint": "\u00c5"
+        },
+        "other_carboxyl_O_A": {
+          "label": "\u8ddd\u53e6\u4e00\u4e2a\u7fa7\u57fa\u6c27",
+          "value": 2.49,
+          "hint": "\u00c5"
+        }
+      },
+      "notes": "\u628a\u9009\u4e2d\u7684\u6c22\u2014\u2014ra \u7fa7\u57fa\u7684 OH \u6c22\uff08\u89c6\u56fe\u5e8f\u53f7 11612\uff0c\u89e3\u6790\u5230\u6587\u4ef6\u5e8f\u5217\u53f7 11613\uff0c\u8ddd\u6c27 0.99 \u00c5\uff1b11608\u201311612 \u624d\u662f\u73af\u4e0a 5 \u4e2a\u82b3\u9999\u6c22\uff09\u2014\u2014\u66ff\u6362\u4e3a\u82ef\u73af\uff1ara \u7531\u82ef\u7532\u9178\u53d8\u4e3a\u82ef\u7532\u9178\u82ef\u916f\uff08Ph\u2013COO\u2013Ph\uff09\uff0c\u5176\u4f59 16 \u6761\u94fe 11788 \u4e2a\u539f\u5b50\u9010\u539f\u5b50\u6838\u5bf9\u65e0\u53d8\u52a8\u3002\u73af\u51e0\u4f55\uff1a\u8fde\u63a5\u952e O\u2013C 1.420 \u00c5\uff0c\u73af\u5185 C-C 1.395/1.396 \u00c5\uff0cC-H 1.09 \u00c5\uff1b\u73af\u7ed5\u8fde\u63a5\u952e\u65cb\u8f6c 275\u00b0 \u540e\uff0c\u73af\u78b3\u8ddd\u86cb\u767d 3.00 \u00c5\u3001\u65b0\u539f\u5b50\u8ddd\u86cb\u767d\u6700\u8fd1 2.34 \u00c5\u3001\u8ddd ra \u53e6\u4e00\u4e2a\u7fa7\u57fa\u6c27 2.49 \u00c5\uff0c\u65e0\u51b2\u7a81\u3002\u6ce8\u610f\uff1arb\u2013rj \u7b49 9 \u4e2a\u751f\u6210\u5206\u5b50\u4ece\u540c\u4e00\u53e3\u888b\u79cd\u5b50\u957f\u51fa\u3001\u5f7c\u6b64\u91cd\u5408\uff08\u7f16\u8f91\u524d\u65e2\u6709\uff09\uff0c\u65b0\u73af\u4e2a\u522b\u539f\u5b50\u4e0e\u5b83\u4eec\u6700\u8fd1 0.3\u20132.1 \u00c5\uff0c\u8fd9\u662f\u53e0\u52a0\u663e\u793a\u7684\u56fa\u6709\u73b0\u8c61\u3002",
+      "updated": "2026-09-28T11:47:34Z",
+      "job": "1ru7_edit_ra",
+      "highlight": [
+        {
+          "chain": "ra",
+          "resi": 1
+        }
+      ]
+    }
+  },
+  {
+    "name": "1ru7_ra_redock",
+    "file": "structures/1ru7_ra_redock.pdb",
+    "meta": {
+      "name": "1ru7_ra_redock",
+      "source": "vina",
+      "format": "pdb",
+      "chains": [
+        {
+          "id": "A",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "B",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "C",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "D",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "E",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "F",
+          "residues": 159,
+          "role": "HA2"
+        },
+        {
+          "id": "L",
+          "residues": 1,
+          "ligand": true,
+          "role": "ligand"
+        }
+      ],
+      "metrics": {
+        "best_affinity_kcal_mol": {
+          "label": "\u7ed3\u5408\u4eb2\u548c\u529b",
+          "value": -7.56,
+          "hint": "kcal/mol\uff0c\u8d8a\u8d1f\u8d8a\u5f3a"
+        },
+        "num_modes": {
+          "label": "\u59ff\u6001\u6570",
+          "value": 9
+        },
+        "mode_spread": {
+          "label": "\u59ff\u6001\u95f4\u6700\u5927\u5dee\u8ddd",
+          "value": 0.62,
+          "hint": "kcal/mol"
+        },
+        "pose_rmsd_A": {
+          "label": "\u4e0e\u7f16\u8f91\u59ff\u6001\u7684RMSD",
+          "value": 2.49,
+          "hint": "\u00c5"
+        },
+        "min_contact_A": {
+          "label": "\u914d\u4f53-\u53d7\u4f53\u6700\u8fd1\u91cd\u539f\u5b50",
+          "value": 2.76,
+          "hint": "\u00c5"
+        }
+      },
+      "notes": "\u521a\u6027\u91cd\u5bf9\u63a5\uff1ara\uff08\u7f16\u8f91\u540e\u7684\u82ef\u7532\u9178\u82ef\u916f\uff0cPh\u2013COO\u2013Ph\uff09\u5bf9\u56de HA \u4e09\u805a\u4f53 A\u2013F\u3002\u76d2\u5b50\u4e2d\u5fc3\u53d6\u8be5\u5206\u5b50\u5728\u7ed3\u6784\u4e2d\u7684\u91cd\u539f\u5b50\u91cd\u5fc3 (50.5, 63.7, 148.8)\uff0c22 \u00c5 \u7acb\u65b9\uff0cexhaustiveness 8\uff0c9 \u4e2a\u59ff\u6001\u3002\u6700\u4f73\u4eb2\u548c\u529b -7.56 kcal/mol\uff08\u4e2d\u7b49\uff09\uff0c9 \u4e2a\u59ff\u6001\u5168\u90e8\u843d\u5728 0.62 kcal/mol \u4ee5\u5185\uff0c\u7ed3\u5408\u6a21\u5f0f\u660e\u786e\uff1b\u53d7\u4f53\u65e0\u6b8b\u57fa\u88ab meeko \u4e22\u5f03\uff0c\u540c\u5143\u7d20\u91cd\u539f\u5b50\u51b2\u7a81 0 \u4e2a\uff08\u6700\u8fd1\u63a5\u89e6 2.76 \u00c5\uff09\u3002\u5bf9\u63a5\u59ff\u6001\u4e0e\u7f16\u8f91\u59ff\u6001\u6700\u4f18\u53e0\u5408 RMSD 2.49 \u00c5\uff1a\u540c\u4e00\u53e3\u888b\uff08\u63a5\u89e6 D:504/509/619/632/634 \u4e0e F:617/620/621/624\uff0c\u5373\u53e3\u888b r \u5185\u58c1\uff09\uff0c\u4f46\u8fdc\u7aef\u82ef\u73af\u671d\u5411\u4e0d\u540c\u3002\u914d\u4f53\u6309\u91cd\u539f\u5b50\u8868\u793a\uff08meeko \u5236\u5404\u65f6\u53bb\u6c22\uff0c15 \u4e2a\u91cd\u539f\u5b50\uff09\uff0c\u590d\u5408\u7269\u7684\u5143\u7d20\u5217\u4e0e CONECT \u952e\u5df2\u91cd\u5efa\u3002\u53d7\u4f53\u4e3a\u4e09\u805a\u4f53 A\u2013F\uff08\u542b meeko \u8865\u5145\u7684\u6c22\uff09\uff1b\u73af\u80bd P \u8ddd\u53e3\u888b 23 \u00c5\u3001\u5176\u4f59 9 \u4e2a\u53e0\u52a0\u5206\u5b50\u672a\u7eb3\u5165\u53d7\u4f53\u3002",
+      "updated": "2026-09-28T11:57:19Z",
+      "params": {
+        "box_center": [
+          50.5,
+          63.7,
+          148.8
+        ],
+        "box_size": [
+          22,
+          22,
+          22
+        ],
+        "exhaustiveness": 8,
+        "num_modes": 9,
+        "flexibility": "rigid",
+        "ligand_smiles": "O=C(Oc1ccccc1)c1ccccc1",
+        "ligand_chain": "ra"
+      },
+      "job": "1ru7_ra_redock",
+      "highlight": [
+        {
+          "chain": "D",
+          "resi": 504
+        },
+        {
+          "chain": "D",
+          "resi": 509
+        },
+        {
+          "chain": "D",
+          "resi": 619
+        },
+        {
+          "chain": "D",
+          "resi": 632
+        },
+        {
+          "chain": "D",
+          "resi": 634
+        },
+        {
+          "chain": "F",
+          "resi": 617
+        },
+        {
+          "chain": "F",
+          "resi": 620
+        },
+        {
+          "chain": "F",
+          "resi": 621
+        },
+        {
+          "chain": "F",
+          "resi": 624
+        }
+      ]
+    }
+  },
+  {
+    "name": "1ru7_ra_md_relaxed",
+    "file": "structures/1ru7_ra_md_relaxed.pdb",
+    "meta": {
+      "name": "1ru7_ra_md_relaxed",
+      "source": "openmm",
+      "format": "pdb",
+      "chains": [
+        {
+          "id": "A",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "B",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "C",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "D",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "E",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "F",
+          "residues": 159,
+          "role": "HA2"
+        },
+        {
+          "id": "G",
+          "residues": 1,
+          "ligand": true,
+          "role": "ligand"
+        }
+      ],
+      "metrics": {
+        "ns": {
+          "label": "\u6a21\u62df\u65f6\u957f",
+          "value": 1
+        },
+        "atoms": {
+          "label": "\u4f53\u7cfb\u539f\u5b50\u6570",
+          "value": 375290
+        },
+        "rmsd_mean_nm": {
+          "label": "\u86cb\u767d\u9aa8\u67b6RMSD(\u5e73\u5747)",
+          "value": 0.152,
+          "hint": "nm"
+        },
+        "rmsd_max_nm": {
+          "label": "\u86cb\u767d\u9aa8\u67b6RMSD(\u6700\u5927)",
+          "value": 0.188,
+          "hint": "nm"
+        },
+        "rg_mean_nm": {
+          "label": "\u56de\u65cb\u534a\u5f84Rg(\u5e73\u5747)",
+          "value": 4.033,
+          "hint": "nm"
+        },
+        "ligand_rmsd_mean_nm": {
+          "label": "\u914d\u4f53RMSD(\u5e73\u5747)",
+          "value": 0.087,
+          "hint": "nm"
+        },
+        "ligand_min_dist_final_nm": {
+          "label": "\u914d\u4f53-\u86cb\u767d\u6700\u5c0f\u8ddd\u79bb(\u672b\u5e27)",
+          "value": 0.186,
+          "hint": "nm"
+        },
+        "ns_per_day": {
+          "label": "\u901f\u5ea6",
+          "value": 25.2,
+          "hint": "ns/\u5929\uff0cOpenCL"
+        }
+      },
+      "notes": "1 ns \u5168\u539f\u5b50\u52a8\u529b\u5b66\u6a21\u62df\uff08OpenCL/GPU\uff0c\u5b8c\u6574\u4f53\u7cfb 375,290 \u539f\u5b50 = HA\u4e09\u805a\u4f53 + \u82ef\u7532\u9178\u82ef\u916f + 117,328 \u6c34 + 0.15 M NaCl\uff1b25.2 ns/\u5929\uff0c\u8017\u65f657\u5206\u949f\uff09\u3002\u53d1\u5e03\u7684\u662f\u53bb\u6eb6\u5242\u540e\u7684\u6eb6\u8d28\u672b\u5e27\uff0822,656 \u539f\u5b50\uff0c\u94fe G=\u914d\u4f53\uff09\uff1b\u5b8c\u6574\u6eb6\u5242\u5316\u672b\u5e27\u4e0e 500 \u5e27\u8f68\u8ff9\u5728 work/pockets_1ru7/md_ra/md_out/\uff08final.pdb\u3001trajectory.dcd\uff09\u3002\u7ed3\u679c\uff1a\u6700\u5c0f\u5316\u540e\u52bf\u80fd -7.13e6 kJ/mol\uff0c\u4ea7\u51fa\u6bb5\u7a33\u5b9a\u5728 -6.20e6\uff1b\u86cb\u767d\u9aa8\u67b6 RMSD \u5e73\u5747 0.152 nm\uff08\u6700\u5927 0.188\uff09\uff0cRg \u7a33\u5b9a\u5728 4.03 nm\u2014\u2014\u590d\u5408\u7269\u6574\u4f53\u7a33\u5b9a\uff1b\u914d\u4f53 RMSD \u5e73\u5747 0.087 nm\uff08\u6700\u5927 0.18\uff09\uff0c\u914d\u4f53-\u86cb\u767d\u6700\u5c0f\u8ddd\u79bb\u5168\u7a0b 0.19\u20130.24 nm\u3001\u672b\u5e27 1.86 \u00c5\u2014\u2014\u5bf9\u63a5\u59ff\u6001\u5b88\u4f4f\u4e86\uff1b\u672b\u5e27\u914d\u4f53\u4e0e\u5bf9\u63a5\u59ff\u6001\u53e0\u5408 RMSD 1.63 \u00c5\uff0c\u4ecd\u5728\u539f\u53e3\u888b\u3002\u6ce8\u610f\uff1a1 ns \u53ea\u662f\u5192\u70df\u6d4b\u8bd5\uff0c0.15 nm \u6f02\u79fb\u5728\u6b64\u5c3a\u5ea6\u5c5e\u6b63\u5e38\uff0c\u4e0d\u80fd\u636e\u6b64\u4e0b\u7a33\u5b9a\u6027\u7ed3\u8bba\uff0c\u8981\u4e0b\u7ed3\u8bba\u9700 10 ns \u4ee5\u4e0a\u3002",
+      "updated": "2026-09-28T15:39:45Z",
+      "job": "1ru7_ra_md",
+      "highlight": [
+        {
+          "chain": "G",
+          "resi": 1
+        }
+      ]
+    }
+  },
+  {
+    "name": "1ru7_cycpep12",
+    "file": "structures/1ru7_cycpep12.cif",
+    "meta": {
+      "name": "1ru7_cycpep12",
+      "source": "binder-design",
+      "format": "cif",
+      "chains": [
+        {
+          "id": "A",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "B",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "C",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "D",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "E",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "F",
+          "residues": 159,
+          "role": "HA2"
+        },
+        {
+          "id": "P",
+          "residues": 12,
+          "role": "cyclic_peptide"
+        }
+      ],
+      "metrics": {
+        "peptide_length": {
+          "label": "\u73af\u80bd\u957f\u5ea6",
+          "value": 12,
+          "hint": "\u6b8b\u57fa"
+        },
+        "ring_bond_A": {
+          "label": "\u6210\u73af\u952e N1\u2013C12",
+          "value": 1.32,
+          "hint": "\u00c5\uff0c\u73af\u5df2\u95ed\u5408"
+        },
+        "min_dist_F542_A": {
+          "label": "\u8ddd F542 \u878d\u5408\u80bd",
+          "value": 3.0,
+          "hint": "\u00c5"
+        },
+        "contacts": {
+          "label": "4.5 \u00c5 \u5185\u63a5\u89e6\u6b8b\u57fa",
+          "value": "F:541-545/519-521/552-553, E:32/34/319"
+        }
+      },
+      "notes": "\u672c\u4f1a\u8bdd\u65e9\u524d\u8bbe\u8ba1\u7684 12 \u6b8b\u57fa\u73af\u80bd\uff08\u94fe P\uff1aASN-PRO-LEU-THR-GLY-GLU-VAL-VAL-ASN-GLY-VAL-TYR\uff0c88 \u539f\u5b50\uff09\uff0c\u53d1\u5e03\u4e3a\u4e0e HA \u4e09\u805a\u4f53\uff08A\u2013F\uff09\u7684\u590d\u5408\u7269\u3002N1\u2013C12 \u76f8\u8ddd 1.32 \u00c5\uff0c\u73af\u786e\u5b9e\u95ed\u5408\u3002\u5b83\u7ed3\u5408\u5728 F542 \u878d\u5408\u80bd\u6240\u5728\u7684\u8de8\u539f\u4f53\u754c\u9762\uff1a\u8ddd F:542 3.0 \u00c5\uff0c4.5 \u00c5 \u5185\u63a5\u89e6 F:GLN542/THR541/ILE545/TRP521/ASP519/GLY520/THR549 \u4e0e\u76f8\u90bb\u539f\u4f53\u7684 E:HIS32/VAL34/THR319\u3002\u8fd9\u662ffpocket \u62a5\u4e0d\u51fa\u7a7a\u8154\u7684\u90a3\u4e2a\u4f4d\u70b9\uff08\u878d\u5408\u80bd\u81ea\u8eab\u5360\u7740\uff09\u3002\u540c\u76ee\u5f55\u4e0b\u8fd8\u6709\uff1a1ru7_cycpep12_offsite.cif\uff08\u504f\u5411 offsite \u7684\u7248\u672c\uff09\u30011ruz_cycpep12_rank1.cif\uff081RUZ \u4e0a\u7684 6 \u4e2a\u73af\u80bd\u8bbe\u8ba1\uff09\u3002\u9700\u8981\u5355\u72ec\u770b\u80bd\u94fe\u3001\u6216\u4ece RCSB \u627e\u4e2a\u5929\u7136\u73af\u80bd\uff0c\u8bf4\u4e00\u58f0\u3002",
+      "updated": "2026-09-28T16:03:58Z",
+      "job": "1ru7_cycpep12_show",
+      "highlight": [
+        {
+          "chain": "P",
+          "resi": 1
+        },
+        {
+          "chain": "P",
+          "resi": 2
+        },
+        {
+          "chain": "P",
+          "resi": 3
+        },
+        {
+          "chain": "P",
+          "resi": 4
+        },
+        {
+          "chain": "P",
+          "resi": 5
+        },
+        {
+          "chain": "P",
+          "resi": 6
+        },
+        {
+          "chain": "P",
+          "resi": 7
+        },
+        {
+          "chain": "P",
+          "resi": 8
+        },
+        {
+          "chain": "P",
+          "resi": 9
+        },
+        {
+          "chain": "P",
+          "resi": 10
+        },
+        {
+          "chain": "P",
+          "resi": 11
+        },
+        {
+          "chain": "P",
+          "resi": 12
+        }
+      ]
+    }
+  },
+  {
+    "name": "1ru7_ra_biaryl",
+    "file": "structures/1ru7_ra_biaryl.pdb",
+    "meta": {
+      "name": "1ru7_ra_biaryl",
+      "source": "molecule-editing",
+      "format": "pdb",
+      "chains": [
+        {
+          "id": "A",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "B",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "C",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "D",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "E",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "F",
+          "residues": 159,
+          "role": "HA2"
+        },
+        {
+          "id": "G",
+          "residues": 1,
+          "ligand": true,
+          "role": "ligand"
+        }
+      ],
+      "metrics": {
+        "bond_to_attachment_A": {
+          "label": "\u8fde\u63a5\u952e\u957f\uff08C6\u2013C\uff09",
+          "value": 1.52,
+          "hint": "\u00c5"
+        },
+        "ring_cc_A": {
+          "label": "\u73af\u5185 C-C",
+          "value": 1.395,
+          "hint": "\u00c5"
+        },
+        "ring_ch_A": {
+          "label": "\u73af\u5185 C-H",
+          "value": 1.09,
+          "hint": "\u00c5"
+        },
+        "interring_dihedral_deg": {
+          "label": "\u4e24\u73af\u4e8c\u9762\u89d2",
+          "value": -31,
+          "hint": "\u5ea6\uff0c\u8054\u82b3\u70c3\u6b63\u5e38\u626d\u66f2"
+        },
+        "clearance_A": {
+          "label": "\u65b0\u73af\u6700\u5c0f\u95f4\u9699",
+          "value": 2.13,
+          "hint": "\u00c5\uff08\u5bf9\u6240\u6709\u5176\u4ed6\u539f\u5b50\uff0c\u542b\u6c22\uff09"
+        },
+        "ligand_atoms": {
+          "label": "\u914d\u4f53\u539f\u5b50\u6570",
+          "value": 35
+        }
+      },
+      "notes": "\u914d\u4f53\uff08\u82ef\u7532\u9178\u82ef\u916f\uff09C6 \u4f4d\u4e0a\u63a5\u82ef\u73af\u540e\u7684\u8054\u82b3\u70c3\u590d\u5408\u7269\uff0c\u672c\u6b21\u4fee\u6b63\u4e86\u4e0a\u4e00\u7248\u7684\u4e24\u4e2a\u663e\u793a\u7f3a\u9677\uff1a(1) \u4e0a\u4e00\u7248\u65b0\u73af 5 \u4e2a\u6c22\u91cc\u6709 4 \u4e2a\u5750\u9519\u4e86\u78b3\u2014\u2014\u7f16\u8f91\u811a\u672c\u4f1a\u628a\u6a21\u677f\u6c22\u7ed5\u8fde\u63a5\u952e\u6574\u4f53\u65cb\u8f6c\uff0c\u91cd\u5efa\u65f6\u6309\u6700\u8fd1\u78b3\u5206\u914d\u5bbf\u4e3b\u5c31\u914d\u9519\u4e86\uff0c\u800c CONECT \u4ecd\u8fde\u7740\u539f\u6765\u7684\u78b3\uff0c\u89c6\u56fe\u4e8e\u662f\u753b\u51fa 4 \u6839 3.4 \u00c5 \u6a2a\u7a7f\u82ef\u73af\u7684\u952e\uff1b\u73b0\u5728\u6539\u7528 CONECT \u7684\u771f\u5b9e\u8fde\u63a5\u5173\u7cfb\u91cd\u5efa\uff0c5 \u4e2a\u6c22\u90fd\u5750\u5728\u5404\u81ea\u8fde\u7740\u7684\u78b3\u4e0a\uff081.09 \u00c5\uff09\u3002(2) \u4e0a\u4e00\u7248\u4e24\u73af\u4e8c\u9762\u89d2 170\u00b0\uff08\u57fa\u672c\u5171\u9762\uff09\uff0c\u90bb\u4f4d\u6c22\u76f8\u649e 1.87 \u00c5\uff1b\u91cd\u65b0\u505a\u4e8c\u9762\u89d2\u641c\u7d22\uff08\u8fd9\u6b21\u628a\u6240\u6709\u539f\u5b50\u7684\u6c22\u90fd\u7eb3\u5165\u907f\u8ba9\uff09\u540e\u53d6 -31\u00b0\uff0c\u662f\u8054\u82b3\u70c3\u7684\u6b63\u5e38\u626d\u66f2\u3002\u51e0\u4f55\uff1a\u8fde\u63a5\u952e C6\u2013C 1.520 \u00c5\uff0c\u73af\u5185 C-C 1.394/1.395 \u00c5\uff0cC-H 1.09 \u00c5\uff0c\u73af\u5e73\u9762\u5ea6 0.000 \u00c5\uff1b\u540c\u5143\u7d20\u91cd\u539f\u5b50\u51b2\u7a81 0 \u4e2a\uff1b\u86cb\u767d\u4e09\u805a\u4f53 22,631 \u4e2a\u539f\u5b50\u9010\u539f\u5b50\u6838\u5bf9\u96f6\u53d8\u52a8\u3002\u65b0\u73af\u539f\u5b50\u5df2\u6539\u540d C14\u2013C19/H11\u2013H15\uff0c\u4e0e\u539f\u6709\u539f\u5b50\u4e0d\u518d\u91cd\u540d\u3002\u6ce8\u610f\u8fd9\u662f MD \u677e\u5f1b\u672b\u5e27\u4e0a\u7684\u7f16\u8f91\u3002",
+      "updated": "2026-10-10T10:44:56Z",
+      "job": "1ru7_edit_g6",
+      "highlight": [
+        {
+          "chain": "G",
+          "resi": 1
+        }
+      ]
+    }
+  },
+  {
+    "name": "1ru7_ra_trimmed",
+    "file": "structures/1ru7_ra_trimmed.pdb",
+    "meta": {
+      "name": "1ru7_ra_trimmed",
+      "source": "molecule-editing",
+      "format": "pdb",
+      "chains": [
+        {
+          "id": "A",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "B",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "C",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "D",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "E",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "F",
+          "residues": 159,
+          "role": "HA2"
+        },
+        {
+          "id": "G",
+          "residues": 1,
+          "ligand": true,
+          "role": "ligand"
+        }
+      ],
+      "metrics": {
+        "atoms_removed": {
+          "label": "\u5220\u9664\u539f\u5b50\u6570",
+          "value": 6
+        },
+        "atoms_total": {
+          "label": "\u603b\u539f\u5b50\u6570",
+          "value": 22660
+        },
+        "ligand_atoms": {
+          "label": "\u914d\u4f53\u539f\u5b50\u6570",
+          "value": 29
+        },
+        "protein_atoms": {
+          "label": "\u86cb\u767d\u539f\u5b50\u6570",
+          "value": 22631
+        },
+        "protein_moved": {
+          "label": "\u86cb\u767d\u53d8\u52a8\u539f\u5b50",
+          "value": 0
+        }
+      },
+      "notes": "\u6309\u4f60\u7684\u9009\u62e9\u5220\u9664\u4e86 6 \u4e2a\u539f\u5b50\uff1aC17\u3001C18\u3001C19 \u4e09\u4e2a\u78b3\u548c\u5b83\u4eec\u7684\u6c22 H13\u3001H14\u3001H15\uff08\u65b0\u82ef\u73af\u8fdc\u4fa7\u7684\u4e00\u534a\uff09\u3002\u5176\u4f59\u4e00\u5f8b\u672a\u52a8\uff1a\u86cb\u767d\u4e09\u805a\u4f53 22,631 \u4e2a\u539f\u5b50\u9010\u539f\u5b50\u6838\u5bf9\u96f6\u53d8\u52a8\uff0c\u914d\u4f53\u5176\u4f59 23 \u4e2a\u539f\u5b50\u5750\u6807\u4e0d\u53d8\uff0cCONECT \u5df2\u540c\u6b65\u53bb\u6389\u6307\u5411\u88ab\u5220\u539f\u5b50\u7684 7 \u6761\u952e\u3002\u9700\u8981\u8bf4\u660e\u7684\u540e\u679c\uff08\u5220\u9664\u524d\u5df2\u63d0\u9192\uff09\uff1a\u65b0\u73af\u4fdd\u8fdc\u4fa7\u88ab\u5220\u540e\u5269\u4e0b C14\u2013C15\u2013C16 \u4e00\u6bb5\u4e09\u78b3\u6b8b\u6bb5\u6302\u5728 C6 \u4e0a\uff0c\u5176\u4e2d C14 \u53ea\u5269 2 \u4e2a\u952e\uff08C6\u3001C15\uff09\u3001C16 \u53ea\u5269 2 \u4e2a\u952e\uff08C15\u3001H12\uff09\uff0c\u4ef7\u6001\u4e0d\u5b8c\u6574\u2014\u2014\u8fd9\u662f\u65ad\u73af\u788e\u7247\uff0c\u4e0d\u662f\u5b8c\u6574\u5206\u5b50\u3002\u5982\u9700\u56de\u5230\u52a0\u73af\u524d\u7684\u82ef\u7532\u9178\u82ef\u916f\uff08\u5220\u6574\u4e2a\u65b0\u73af\u5e76\u628a C6 \u7684\u6c22\u8865\u56de\u53bb\uff09\uff0c\u8bf4\u4e00\u58f0\u3002",
+      "updated": "2026-10-10T10:49:11Z",
+      "job": "1ru7_edit_g6",
+      "highlight": [
+        {
+          "chain": "G",
+          "resi": 1
+        }
+      ]
+    }
+  },
+  {
+    "name": "1ru7_g6_redock",
+    "file": "structures/1ru7_g6_redock.pdb",
+    "meta": {
+      "name": "1ru7_g6_redock",
+      "source": "vina",
+      "format": "pdb",
+      "chains": [
+        {
+          "id": "A",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "B",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "C",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "D",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "E",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "F",
+          "residues": 159,
+          "role": "HA2"
+        },
+        {
+          "id": "L",
+          "residues": 1,
+          "ligand": true,
+          "role": "ligand"
+        }
+      ],
+      "metrics": {
+        "best_affinity_kcal_mol": {
+          "label": "\u7ed3\u5408\u4eb2\u548c\u529b",
+          "value": -9.293,
+          "hint": "kcal/mol\uff0c\u8d8a\u8d1f\u8d8a\u5f3a"
+        },
+        "num_modes": {
+          "label": "\u59ff\u6001\u6570",
+          "value": 9
+        },
+        "mode_spread": {
+          "label": "\u59ff\u6001\u95f4\u6700\u5927\u5dee\u8ddd",
+          "value": 1.31,
+          "hint": "kcal/mol"
+        },
+        "min_contact_A": {
+          "label": "\u914d\u4f53-\u53d7\u4f53\u6700\u5c0f\u91cd\u539f\u5b50\u8ddd",
+          "value": 2.71,
+          "hint": "\u00c5"
+        },
+        "pose_rmsd_A": {
+          "label": "\u4e0e\u7f16\u8f91\u59ff\u6001\u53e0\u52a0RMSD",
+          "value": 2.31,
+          "hint": "\u00c5"
+        },
+        "receptor_residues_dropped": {
+          "label": "meeko\u4e22\u5f03\u6b8b\u57fa",
+          "value": 0
+        }
+      },
+      "notes": "\u8054\u82ef\u914d\u4f53\uff08[1,1'-\u8054\u82ef]-3-\u57fa\u82ef\u7532\u9178\u916f\uff0c21\u91cd\u539f\u5b50\uff0cSMILES\u7ecf\u4e0e\u6587\u4ef6\u952e\u56fe\u7684MCS\u540c\u6784\u9a8c\u8bc121/21\uff09\u5bf9\u56deMD\u677e\u5f1b\u5e27\u7684HA\u4e09\u805a\u4f53\u3002\u76d2\u5b50\u4e0e\u641c\u7d22\u53c2\u6570\u548c\u4e0a\u4e00\u8f6e-7.56\u5b8c\u5168\u4e00\u81f4\uff0c\u4f46\u53d7\u4f53\u4e0d\u540c\uff1a\u4e0a\u4e00\u8f6e\u662f\u6676\u4f53\u4e09\u805a\u4f53\uff0c\u672c\u8f6e\u662f1ns MD\u672b\u5e27\uff08\u5176HA1/HA2\u5df2\u91cd\u7f16\u53f7\u4e3a1-323/1-160\uff0c\u6676\u4f535-327/501-660\uff1b\u6545D:TYR119\u5373\u6676\u4f53D:TYR619\uff0c\u4e0e\u65e7tab\u5bf9\u7167\u65f6\u6ce8\u610f\uff09\u3002\u6700\u4f73-9.293kcal/mol\uff0c9\u4e2a\u59ff\u6001\u5168\u90e8\u843d\u57281.31kcal/mol\u5185\uff0c\u6a21\u5f0f\u660e\u786e\uff1bmeeko\u96f6\u4e22\u5f03\u3001\u53d7\u4f53\u91cd\u539f\u5b50\u5b8c\u6574\u3002\u59ff\u6001\u4e0e\u7f16\u8f91\u59ff\u6001\u53e0\u52a0RMSD2.31\u00c5\u3001\u8d28\u5fc3\u4f4d\u79fb1.17\u00c5\uff1a\u540c\u4e00\u53e3\u888b\uff08\u63a5\u89e6D:508/509/616/619/627/632/634/635\u4e0eF:617/620/621/623/624\uff0c\u548c\u4e0a\u4e00\u8f6e\u916f\u7684\u63a5\u89e6\u9762\u91cd\u53e0\uff09\uff0c\u4f46\u4e24\u73af\u671d\u5411\u4e0d\u540c\u3002\u6700\u5c0f\u91cd\u539f\u5b50\u63a5\u89e62.71\u00c5\uff08O..F:GLU120O\uff09\uff0c\u540c\u7c7b\u5143\u7d20\u91cd\u539f\u5b50\u65e0\u51b2\u7a81\u2014\u2014Vina\u6253\u5206\u8f6f\u5316vdW\uff0c\u6b64\u4e3a\u76f4\u63a5\u68c0\u67e5\u3002\u53e6\u4fee\uff1adock.py\u7684pdbqt_to_pdb\u539f\u5148\u628aPDBQT\u884c\u5c3e\u7684AutoDock\u7c7b\u578b\uff08OA/HD/NA\uff09\u5f53\u5143\u7d20\u5199\u5165\u5143\u7d20\u5217\uff0c\u81f44955\u4e2a\u539f\u5b50\u5143\u7d20\u9519\u8bef\u3001\u4e00\u5207\u57fa\u4e8e\u5143\u7d20\u7684\u68c0\u67e5\u5931\u6548\uff1b\u5df2\u6539\u4e3a\u8bfb[76:78]\u5143\u7d20\u5217\u5e76\u5c06\u86cb\u767d\u5199\u56deATOM\u8bb0\u5f55\u3002",
+      "updated": "2026-10-10T14:32:21Z",
+      "params": {
+        "box_center": [
+          50.5,
+          63.7,
+          148.8
+        ],
+        "box_size": [
+          22,
+          22,
+          22
+        ],
+        "exhaustiveness": 8,
+        "num_modes": 9,
+        "flexibility": "rigid",
+        "ligand_smiles": "O=C(Oc1cc(ccc1)c2ccccc2)c1ccccc1",
+        "ligand_chain": "G"
+      },
+      "job": "1ru7_g6_redock"
+    }
+  },
+  {
+    "name": "1ru7_trim_redock",
+    "file": "structures/1ru7_trim_redock.pdb",
+    "meta": {
+      "name": "1ru7_trim_redock",
+      "source": "vina",
+      "format": "pdb",
+      "chains": [
+        {
+          "id": "A",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "B",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "C",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "D",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "E",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "F",
+          "residues": 159,
+          "role": "HA2"
+        },
+        {
+          "id": "L",
+          "residues": 1,
+          "ligand": true,
+          "role": "ligand"
+        }
+      ],
+      "metrics": {
+        "best_affinity_kcal_mol": {
+          "label": "\u7ed3\u5408\u4eb2\u548c\u529b",
+          "value": -8.716,
+          "hint": "kcal/mol\uff0c\u8d8a\u8d1f\u8d8a\u5f3a"
+        },
+        "num_modes": {
+          "label": "\u59ff\u6001\u6570",
+          "value": 9
+        },
+        "mode_spread": {
+          "label": "\u59ff\u6001\u95f4\u6700\u5927\u5dee\u8ddd",
+          "value": 1.39,
+          "hint": "kcal/mol"
+        },
+        "min_contact_A": {
+          "label": "\u914d\u4f53-\u53d7\u4f53\u6700\u5c0f\u91cd\u539f\u5b50\u8ddd",
+          "value": 2.91,
+          "hint": "\u00c5"
+        },
+        "pose_rmsd_A": {
+          "label": "\u4e0e\u5c4f\u5e55\u7247\u6bb5\u53e0\u52a0RMSD",
+          "value": 2.17,
+          "hint": "\u00c5"
+        },
+        "receptor_residues_dropped": {
+          "label": "meeko\u4e22\u5f03\u6b8b\u57fa",
+          "value": 0
+        }
+      },
+      "notes": "\u5c4f\u5e55\u4e0a\u8fd9\u4e2a\u914d\u4f53\u662f\u780d\u6389\u8fdc\u73af\u4e00\u534a\u540e\u7684\u6b8b\u7247\uff08C14\u3001C16 \u5747\u53ea\u52692\u4e2a\u952e\uff0c\u4ef7\u6001\u4e0d\u5b8c\u6574\uff0c\u65e0\u6cd5\u76f4\u63a5\u5236\u5907\uff09\uff0c\u6309\u622a\u65ad\u7247\u6bb5\u7684\u6807\u51c6\u60ef\u4f8b\u9971\u548c\u8865\u6c22\u8865\u6210 3-\u4e19\u57fa\u82ef\u7532\u9178\u82ef\u916f\uff0818\u91cd\u539f\u5b50\uff0c268Da\uff1b\u91cd\u539f\u5b50\u8fde\u63a5\u7ecf\u4e0e\u6587\u4ef6\u952e\u56fe\u7684MCS\u540c\u6784\u9a8c\u8bc118/18\uff09\u540e\u5bf9\u63a5\u3002\u76d2\u5b50\u3001\u641c\u7d22\u53c2\u6570\u3001\u53d7\u4f53\u5e27\u4e0e -9.293 \u90a3\u4e00\u8f6e\u5b8c\u5168\u4e00\u81f4\uff0c\u6545\u4eb2\u548c\u529b\u5dee\u5373\u622a\u65ad\u4ee3\u4ef7\uff1a-8.716\uff0c\u5f310.58kcal/mol\u3002\u843d\u5728\u540c\u4e00\u53e3\u888b\uff08\u63a5\u89e6 D:616/619/623/634\u3001F:616-624\u3001B:623\uff0c\u6676\u4f53\u7f16\u53f7\uff1bMD\u5e27\u7f16\u53f7\u5373 D:116/119/123/134\u3001F:116-124\uff09\uff0c\u59ff\u6001\u4e0e\u5c4f\u5e55\u7247\u6bb5\u53e0\u52a0RMSD2.17\u00c5\u3001\u8d28\u5fc3\u79fb0.76\u00c5\u30029\u4e2a\u59ff\u6001\u5206\u5e03\u57281.39kcal/mol\u5185\uff0c\u524d4\u4e2a\u4e92\u76f81.3-1.6\u00c5\u4e3a\u4e3b\u6a21\u5f0f\uff0c\u5176\u4f59\u4e3a\u66ff\u4ee3\u653e\u7f6e\u3002\u6700\u5c0f\u91cd\u539f\u5b50\u63a5\u89e62.91\u00c5\uff08O..D:TYR119OH\uff09\uff0c\u540c\u7c7b\u5143\u7d20\u91cd\u539f\u5b50\u65e0\u51b2\u7a81\uff1bmeeko\u96f6\u4e22\u5f03\u3001\u53d7\u4f53\u91cd\u539f\u5b50\u5b8c\u6574\u3002\u6ce8\u610f\uff1a\u53d1\u5e03\u7684\u662f\u8865\u5168\u540e\u7684\u5206\u5b50\uff0c\u4e0d\u662f\u5c4f\u5e55\u4e0a\u90a3\u4e2a\u4ef7\u6001\u4e0d\u5b8c\u6574\u7684\u6b8b\u7247\u3002",
+      "updated": "2026-10-11T02:28:30Z",
+      "params": {
+        "box_center": [
+          50.5,
+          63.7,
+          148.8
+        ],
+        "box_size": [
+          22,
+          22,
+          22
+        ],
+        "exhaustiveness": 8,
+        "num_modes": 9,
+        "flexibility": "rigid",
+        "ligand_smiles": "O=C(Oc1cc(CCC)ccc1)c1ccccc1",
+        "ligand_chain": "G"
+      },
+      "job": "1ru7_trim_redock"
+    }
+  },
+  {
+    "name": "1ru7_pockets_noP",
+    "file": "structures/1ru7_pockets_noP.pdb",
+    "meta": {
+      "name": "1ru7_pockets_noP",
+      "source": "molecule-editing",
+      "format": "pdb",
+      "chains": [
+        {
+          "id": "A",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "B",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "C",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "D",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "E",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "F",
+          "residues": 159,
+          "role": "HA2"
+        },
+        {
+          "id": "p",
+          "residues": 1,
+          "ligand": true,
+          "role": "pocket_1"
+        },
+        {
+          "id": "q",
+          "residues": 1,
+          "ligand": true,
+          "role": "pocket_2"
+        },
+        {
+          "id": "r",
+          "residues": 1,
+          "ligand": true,
+          "role": "pocket_3"
+        }
+      ],
+      "metrics": {
+        "atoms_removed": {
+          "label": "\u5220\u9664\u539f\u5b50\u6570",
+          "value": 88
+        },
+        "atoms_total": {
+          "label": "\u603b\u539f\u5b50\u6570",
+          "value": 11781
+        },
+        "chain_removed": {
+          "label": "\u5220\u9664\u7684\u94fe",
+          "value": "P (12 aa \u73af\u80bd)"
+        }
+      },
+      "notes": "\u6309\u9009\u62e9\u5220\u9664\u4e86\u6574\u6761\u94fe P\uff1a12 \u6b8b\u57fa\u73af\u80bd\uff08ASN-PRO-LEU-THR-GLY-GLU-VAL-VAL-ASN-GLY-VAL-TYR\uff0c88 \u4e2a\u539f\u5b50\uff0cserial 11517-11604\uff09\u3002\u5176\u4f59\u4e00\u5f8b\u672a\u52a8\u2014\u2014\u86cb\u767d\u4e09\u805a\u4f53\u4e0e\u4e09\u4e2a\u53e3\u888b\u7403\u94fe p/q/r \u7684\u6bcf\u4e00\u6761\u539f\u5b50\u8bb0\u5f55\u4e0e\u6e90\u6587\u4ef6\u9010\u5b57\u8282\u76f8\u540c\uff1b\u6e90\u6587\u4ef6\u65e0 CONECT \u8bb0\u5f55\uff0c\u6545\u65e0\u952e\u9700\u8981\u540c\u6b65\u3002\u9700\u8981\u8bf4\u660e\u7684\u7ee7\u627f\u7f3a\u9677\uff08\u6e90\u6587\u4ef6 1ru7_pockets.pdb \u5c31\u6709\uff0c\u4e0e\u672c\u6b21\u5220\u9664\u65e0\u5173\uff09\uff1a\u53e3\u888b\u7403\u94fe p/q/r \u7684 atom serial \u4ece 1 \u91cd\u65b0\u5f00\u59cb\uff0c\u4e0e\u53d7\u4f53\u81ea\u8eab\u7684 1-11604 \u649e\u4e86 271 \u4e2a\u3002\u8fd9\u662f fpocket \u53ef\u89c6\u5316\u5f53\u5e74\u8ffd\u52a0\u5199\u5165\u65f6\u91cd\u542f\u7f16\u53f7\u6240\u81f4\uff08pocket_cloud.py \u5df2\u4fee\u4e3a\u7eed\u63a5\u53d7\u4f53\u7f16\u53f7\uff0c\u6b64\u540e\u65b0\u751f\u6210\u4e0d\u518d\u6709\u6b64\u95ee\u9898\uff1b\u8fd9\u4e2a\u5df2\u53d1\u5e03\u6587\u4ef6\u8fd8\u5e26\u7740\uff09\u3002\u89c6\u89c9\u6e32\u67d3\u4e0d\u53d7\u5f71\u54cd\uff0c\u4f46\u4efb\u4f55\u6309 serial \u5bfb\u5740\u7684\u5de5\u5177\u4f1a\u8bfb\u5230\u6b67\u4e49\u3002\u5982\u9700\u4e00\u5e76\u4fee\u6389\uff08\u628a p/q/r \u7684 serial \u6539\u4e3a\u7eed\u63a5 11604\uff0c\u7eaf\u7f16\u53f7\u3001\u4e0d\u52a8\u4efb\u4f55\u5750\u6807\u548c\u5316\u5b66\uff09\uff0c\u8bf4\u4e00\u58f0\u3002",
+      "updated": "2026-10-11T02:30:55Z",
+      "job": "1ru7_pockets_noP"
+    }
+  },
+  {
+    "name": "1ru7_f8_cycpep",
+    "file": "structures/1ru7_f8_cycpep.pdb",
+    "meta": {
+      "name": "1ru7_f8_cycpep",
+      "source": "boltzgen",
+      "format": "pdb",
+      "chains": [
+        {
+          "id": "A",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "B",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "C",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "D",
+          "residues": 160,
+          "role": "HA2"
+        },
+        {
+          "id": "E",
+          "residues": 323,
+          "role": "HA1"
+        },
+        {
+          "id": "F",
+          "residues": 159,
+          "role": "HA2"
+        },
+        {
+          "id": "P",
+          "residues": 8,
+          "role": "cyclic_peptide"
+        }
+      ],
+      "metrics": {
+        "designs": {
+          "label": "\u8bbe\u8ba1\u6570",
+          "value": 10
+        },
+        "sequence": {
+          "label": "\u5e8f\u5217",
+          "value": "PRO-ASN-SER-THR-GLY-SER-GLY-ASN"
+        },
+        "ipTM": {
+          "label": "\u754c\u9762 TM-score",
+          "value": 0.295,
+          "hint": ">0.7 \u4e3a\u597d\uff0c\u5f53\u524d\u4e2d\u7b49"
+        },
+        "pLDDT": {
+          "label": "\u590d\u5408\u7269 pLDDT",
+          "value": 0.627,
+          "hint": "0-1"
+        },
+        "hbonds": {
+          "label": "\u6c22\u952e\u6570",
+          "value": 4
+        },
+        "ring_bond_A": {
+          "label": "\u6210\u73af\u952e N-C",
+          "value": 1.3,
+          "hint": "\u00c5\uff0c\u5df2\u95ed\u5408"
+        }
+      },
+      "notes": "\u5728\u9009\u4e2d\u7684 6 \u4e2a\u70ed\u70b9\uff08HA2 \u94fe F:578/579/581/582/585/586\uff0c\u9178\u6027-\u9170\u80fa\u754c\u9762\u6591\u5757\uff09\u5468\u56f4\u7528 BoltzGen \u8bbe\u8ba1 10 \u4e2a 8aa \u73af\u80bd\uff08cyclic: true\uff0cpeptide-anything\uff0c\u88c1\u526a\u4e0a\u4e0b\u6587 15 \u00c5/108 \u6b8b\u57fa\uff0c\u5b9e\u9645\u751f\u6210 16 \u4e2a\uff09\u3002\u53d1\u5e03\u7684\u662f\u6392\u540d\u7b2c 2 \u7684 design_15\uff08PNSTGSGN\uff09\uff1a\u6392\u540d\u7b2c 1 \u7684 design_14 \u867d ipTM \u7565\u9ad8\uff080.325\uff09\u4f46\u7ed3\u6784\u635f\u574f\u2014\u2014\u6210\u73af\u952e 1.69 \u00c5 \u672a\u771f\u6b63\u95ed\u5408\u3001\u4e14\u6709 SER2 O..ILE4 N 0.86 \u00c5 \u7684\u539f\u5b50\u91cd\u53e0\uff0c\u6545\u4e0d\u53d1\u5e03\u3002design_15 \u7684\u6210\u73af\u952e 1.30 \u00c5\u3001\u80bd\u5185\u6700\u5c0f\u63a5\u89e6 2.12 \u00c5\uff0c\u7ed3\u6784\u5e72\u51c0\u3002\u653e\u7f6e\u7ecf\u5750\u6807\u4e00\u81f4\u6027\u9a8c\u8bc1\uff1a\u8bbe\u8ba1\u8f93\u51fa\u6574\u4f53\u5728\u53e6\u4e00\u5750\u6807\u6846\u67b6\uff0c\u4ee5\u70ed\u70b9\u6240\u5728\u94fe\uff08\u8bbe\u8ba1\u94fe F -> \u76ee\u6807\u94fe F\uff0c287 \u4e2a\u5171\u4eab\u91cd\u539f\u5b50\u3001\u53e0\u52a0 RMSD 2.05 \u00c5\uff09\u951a\u5b9a\u540e\uff0c5 \u6761\u4e0a\u4e0b\u6587\u94fe\u5168\u90e8\u843d\u5728\u6b63\u786e\u5bf9\u5e94\u94fe\u4e0a\uff08F 1.43/D 1.57/B 3.02/A 6.29/E 8.58 \u00c5\uff0c\u4e0e\u6b21\u4f18\u5019\u9009\u5dee 12-15 \u00c5\uff09\uff0c\u653e\u7f6e\u65e0\u8bef\u3002\u80bd\u7ed3\u5408\u5728\u539f\u4f53\u754c\u9762\u6c9f\u69fd\uff0c\u6700\u8fd1\u63a5\u89e6\u5728\u76f8\u90bb\u539f\u4f53\u4e0a\u8be5\u6591\u5757\u7684\u526f\u672c\uff1aD:ASN579 1.5\u3001D:ASN582 1.8\u3001D:ASP586 2.1\u3001F:THR564 1.6\u3001F:LYS568 2.4 \u00c5\uff08\u6240\u9009 F \u94fe\u526f\u672c\u8ddd\u80bd\u7ea6 10 \u00c5 \u4ee5\u4e0a\uff09\u3002\u4e24\u5904 WARN \u7ea7\u7d27\u7ef7\u63a5\u89e6\uff1aD:ASN579 CB..P:THR4 CG2 2.17 \u00c5\u3001F:THR564 OG1..P:SER6 OG 1.93 \u00c5\u3002ipTM 0.295 \u5c5e\u4e2d\u7b49\u7f6e\u4fe1\uff1b\u8be5\u7ed3\u6784\u4e3a\u88c1\u526a\u4e0a\u4e0b\u6587\u4e0a\u7684\u8bbe\u8ba1\u91cd\u5efa\u5230\u5b8c\u6574\u4e09\u805a\u4f53\uff0c\u975e\u5bf9\u63a5\u6253\u5206\uff0c\u4e0d\u80fd\u4e0e Vina \u4eb2\u548c\u529b\u6bd4\u8f83\u3002",
+      "updated": "2026-10-11T02:52:48Z",
+      "job": "f8_cycpep",
+      "highlight": [
+        {
+          "chain": "P",
+          "resi": 1
+        },
+        {
+          "chain": "P",
+          "resi": 2
+        },
+        {
+          "chain": "P",
+          "resi": 3
+        },
+        {
+          "chain": "P",
+          "resi": 4
+        },
+        {
+          "chain": "P",
+          "resi": 5
+        },
+        {
+          "chain": "P",
+          "resi": 6
+        },
+        {
+          "chain": "P",
+          "resi": 7
+        },
+        {
+          "chain": "P",
+          "resi": 8
+        }
+      ]
+    }
+  }
+]
