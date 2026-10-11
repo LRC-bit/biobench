@@ -574,24 +574,92 @@
      These come after the desktop rules on purpose. CSS lets the later rule
      win, so a media query placed before the block it is meant to override is
      overridden by it and does nothing at all. */
-  @media (max-width: 1100px) {
-    #left-col {
-      width: min(340px, 32%);
-      left: 10px;
+  /* A phone in portrait is rotated into landscape rather than re-laid-out.
+     
+     The viewer is a three-across workspace: structure in the middle, metrics
+     and sequence on the left, the agent panel on the right. At 390px wide
+     there is no arrangement of that which is not cramped — the columns would
+     take 125px each and leave a 100px slit for the thing being looked at.
+     
+     So the page is turned instead. `body` is rotated 90 degrees and sized to
+     the viewport's *long* axis, which makes a portrait phone present exactly
+     the landscape layout it was built for, full-bleed. The transform-origin
+     is the top-left corner and the translate moves the rotated box back into
+     view; without it the content swings off to the right and below.
+     
+     This is the same trick a native app uses when it declares
+     UIRequiresFullsScreen or locks orientation, done in CSS because a web
+     page cannot lock the sensor on every platform. Where the Screen
+     Orientation API is available the script asks for landscape first, and
+     this rule is what covers the rest — and the case where the user has a
+     rotation lock on, which the API cannot override.
+     
+     Everything inside keeps its desktop geometry: the columns, the gutters
+     and the type sizes are the ones tuned for a wide screen, because after
+     the rotation that is what this is. */
+  @media (orientation: portrait) and (max-width: 900px) {
+    /* The page is turned on its top-left corner and then slid back into
+       view. Both halves are one transform, because a transform is applied
+       right-to-left: rotate first, then translate in the *rotated* frame.
+
+       After rotate(90deg) with a top-left origin the box occupies
+       x:[-100vw, 0] y:[0, 100vh] — it has swung off to the left. The
+       rotated frame's Y axis now points right along the screen, so
+       translateY(-100%) moves it right by its own height, which is 100vw,
+       landing it exactly on x:[0, 100vw]. Filled, no gap, no overflow.
+
+       translateX(-100vh) looks equivalent and is not: the rotated X axis
+       points up the screen, so that slides the page off the top. The sign
+       and the axis both have to be worked out, which is why this comment
+       exists.
+
+       `left: 100vh` would also position it, but `vh` on a phone is the
+       *dynamic* viewport height — the one that grows when the address bar
+       slides away. A layout position read from it re-resolves mid-scroll and
+       the page jumps; a transform is computed once and does not. */
+    html, body {
+      width: 100vh;
+      height: 100vw;
+      overflow: hidden;
     }
-    #agent-panel {
-      width: min(360px, 34%);
-      min-width: 240px;
-      right: 10px;
+    body {
+      transform: rotate(90deg) translateY(-100%);
+      transform-origin: top left;
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 0;
     }
   }
-  /* A phone in landscape is also short. The columns are anchored to the same
-     58px top and bottom as the desktop, which on a 400px-tall screen leaves
-     under 300px of column — enough for the metrics and a couple of chat
-     lines, and nothing else. Tightening the gutters buys most of it back. */
+
+  /* Landscape, but a short one — a phone held sideways is ~400px tall. The
+     columns are anchored to the same 58px top and bottom as the desktop,
+     which leaves under 300px of column: enough for the metrics and a couple
+     of chat lines, and nothing else. Tightening the gutters buys most of it
+     back, and the type comes down a notch so the panels still read. */
   @media (max-height: 480px) {
     #left-col, #agent-panel { top: 44px; bottom: 44px; }
     #topbar { top: 8px; }
+    #status-wrap { bottom: 12px; }
+    #status { padding: 6px 14px; font-size: 11px; }
+    #left-col { width: min(300px, 30%); left: 8px; gap: 7px; }
+    #agent-panel { width: min(320px, 32%); min-width: 210px; right: 8px; }
+    /* The panels' own text, one step down. These are the sizes the desktop
+       uses at 11-13px; on a 400px-tall screen a 13px line is a sixth of the
+       column. */
+    #metrics, #seq-panel, #selection { font-size: 10px; }
+    #metrics .m-title, .seq-head, .s-head { font-size: 10px; }
+    .ag-log { font-size: 10px; }
+    .ag-input { font-size: 11px; }
+    #structure-label { font-size: 11px; }
+  }
+
+  /* A narrow landscape — a small phone sideways, or a large phone with the
+     keyboard up. Same idea as the short one: the columns give up width so
+     the structure keeps some. */
+  @media (orientation: landscape) and (max-width: 740px) {
+    #left-col { width: min(260px, 30%); left: 8px; }
+    #agent-panel { width: min(280px, 32%); min-width: 200px; right: 8px; }
   }
 
   #agent-panel .ag-head {
@@ -1856,6 +1924,46 @@ function webglAvailable() {
 }
 
 const viewer = $3Dmol.createViewer("viewer", { backgroundColor: "#0b0f14" });
+
+// Keep the canvas matched to its container.
+//
+// 3Dmol sizes the WebGL canvas once, from the container's box at the moment
+// createViewer runs. Nothing revisits it afterwards, so every later change of
+// that box leaves the drawing at the old size — stretched, letterboxed, or
+// clipped, depending on which way it moved.
+//
+// Two things move it here. A window resize is the obvious one. The other is
+// the portrait rotation: the page is turned with a CSS transform, which
+// changes the container's on-screen size without any resize event firing at
+// all, so the listener alone would miss it. The orientation listener covers
+// that, and a rAF-deferred resize lets the transform land before the canvas
+// is measured.
+//
+// Debounced, because a drag-resize fires this per pixel and a resize per
+// pixel is a shuck of the GL context for no benefit.
+(function watchViewerSize() {
+  let queued = null;
+  const apply = () => {
+    queued = null;
+    try {
+      viewer.resize();
+      viewer.render();
+    } catch (e) { /* mid-teardown; the next event rebuilds it */ }
+  };
+  const schedule = () => {
+    if (queued !== null) return;
+    queued = requestAnimationFrame(apply);
+  };
+  window.addEventListener("resize", schedule);
+  // Fires on the rotation the CSS performs, and on a device turn the Screen
+  // Orientation API performs. Either way the box has changed.
+  window.addEventListener("orientationchange", schedule);
+  // The rotation is applied by a media query, which can also change under a
+  // fold, a dock, or a browser chrome appearing on scroll. matchMedia is the
+  // only hook for those.
+  const portrait = window.matchMedia("(orientation: portrait)");
+  if (portrait.addEventListener) portrait.addEventListener("change", schedule);
+})();
 
 /* ---------------- stage theme ---------------- */
 
@@ -6076,9 +6184,33 @@ async function poll() {
       // every reload raised a notice for a structure the user had already
       // seen. A notice means "this happened while you were here", so the
       // baseline is taken on arrival and only a later change counts.
+      // The first poll of a page load records the timestamp and says
+      // nothing — a notice means "this happened while you were here", and
+      // whatever was published before the page opened did not.
+      //
+      // It still has to *load* the structure, which is a different thing
+      // from announcing it. restoreTabs() deliberately leaves the newest
+      // archive entry for the poll to add, on the assumption that the poll
+      // will see it as a change. That holds while a run is publishing:
+      // `updated` moves, the next poll takes the branch below, the structure
+      // lands.
+      //
+      // It does not hold for a static copy — a page deployed to a host with
+      // no server behind it, where `updated` is frozen at whatever was
+      // published last. There the first poll is also the last, the branch
+      // below never runs, and the newest structure is the one thing nobody
+      // loads: the page opens on the welcome screen with a full archive
+      // behind it.
+      //
+      // So the baseline is set to a value the file cannot hold, which sends
+      // this first read down the same path as a real change — structure
+      // loaded, tab added. The notice stays suppressed on its own: the
+      // seen-jobs set is seeded further down, on this same first pass, from
+      // status.json, and nothing has compared against it yet.
       if (state.contractUpdated === null) {
-        state.contractUpdated = meta.updated || null;
-      } else if (meta.updated && meta.updated !== state.contractUpdated) {
+        state.contractUpdated = "\u0000first-read";
+      }
+      if (meta.updated && meta.updated !== state.contractUpdated) {
         const cif = await fetch("current.cif?t=" + Date.now());
         if (!cif.ok) return;
         const text = await cif.text();
@@ -6255,6 +6387,42 @@ async function restoreTabs() {
     }
   } catch (e) { /* no archive yet */ }
 }
+
+// Ask for landscape, and fall back to the CSS rotation when refused.
+//
+// The viewer is a three-across workspace and a portrait phone has no room for
+// it. Where the Screen Orientation API exists it is asked first — that turns
+// the whole device, which is what the user expects and what keeps the touch
+// coordinates honest. It is a request, not a command: it needs a fullscreen
+// context on iOS, and it fails outright on a desktop browser or when the user
+// has a rotation lock on. Both of those are covered by the `orientation:
+// portrait` rule in the stylesheet, which rotates the page itself.
+//
+// The two are not redundant. The API gives a real landscape screen; the CSS
+// gives a landscape-shaped page on a portrait screen. Whichever applies, the
+// result is the same layout.
+(function askLandscape() {
+  const lock = () => {
+    try {
+      const so = screen.orientation;
+      if (so && typeof so.lock === "function") {
+        // lock() rejects rather than throwing, and an unhandled rejection is
+        // noise in the console for something that is only an optimisation.
+        Promise.resolve(so.lock("landscape")).catch(() => {});
+      }
+    } catch (e) { /* not supported; the CSS rotation covers it */ }
+  };
+
+  // Some platforms only grant the lock from a fullscreen element, and some
+  // only after a user gesture. Requesting fullscreen first covers the former;
+  // the latter is left alone, because grabbing fullscreen from a gesture the
+  // user did not give for that purpose is worse than a rotated page.
+  if (document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen().then(lock, lock);
+  } else {
+    lock();
+  }
+})();
 
 // Restore first, then start polling. Both are async and both touch the tab
 // list, so running them concurrently lets the poll's "am I on the newest
