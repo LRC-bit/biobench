@@ -719,11 +719,9 @@
      the page is the page and no transform is involved. */
   @media (max-width: 1023px) {
     html, body { overflow: hidden; }
-    /* The wrapper fills the viewport and its children lay out inside it as
-       they always did. No fixed pixel size here: the layout's own extent is
-       whatever the panels add up to, and hard-coding a number would be a
-       second place to keep in step with the first. The script measures the
-       wrapper's real box and scales from that. */
+    /* The wrapper's size is set by the script, from the panels' own extents.
+       It starts at the viewport so the first measurement has something to
+       measure against, and grows to whatever the layout actually occupies. */
     #bb-scale {
       position: absolute;
       top: 0;
@@ -6655,23 +6653,37 @@ async function restoreTabs() {
       return;
     }
     const el = build();
-    // Measure the layout, do not assume it.
+    // Measure the layout by measuring its panels, not the wrapper.
     //
-    // The wrapper is 100% of the viewport, so its own box is the screen and
-    // tells us nothing. What matters is how wide the layout *wants* to be —
-    // the panels are absolutely positioned, so they do not push the wrapper's
-    // scroll width, and the honest measure is the furthest right edge any of
-    // them reaches. scrollWidth is read with the transform cleared, because a
-    // scaled element reports its scaled size.
+    // The wrapper starts at the viewport's size, and its children are all
+    // `position: absolute` — out of flow, so they push neither the wrapper's
+    // scroll size nor its box. Reading the wrapper tells us about the screen,
+    // not about the layout, and a scale computed from it comes out as 1.0:
+    // the panels keep their desktop pixel sizes and run off the edges of a
+    // 390px screen. That is what put the status pill out of sight.
     //
-    // A fixed design size was the first attempt and it is wrong twice over: it
-    // is a second place to keep in step with the CSS, and the height is a
-    // guess — the layout is as tall as its content, which changes when a panel
-    // opens.
+    // So the extent is taken from the panels themselves, and then *given* to
+    // the wrapper. Each panel is measured with getBoundingClientRect while the
+    // transform is cleared — a scaled element reports its scaled rect — and
+    // the furthest right and bottom edges win. The wrapper is then sized to
+    // that, which makes it a real box the panels were laid out in rather than
+    // a window they overflow.
     const prev = el.style.transform;
     el.style.transform = "none";
-    const wantW = Math.max(el.scrollWidth, el.clientWidth || 0);
-    const wantH = Math.max(el.scrollHeight, el.clientHeight || 0);
+    let wantW = 0, wantH = 0;
+    for (const child of el.children) {
+      const r = child.getBoundingClientRect();
+      // rect is viewport-relative and the wrapper sits at the origin, so the
+      // right and bottom edges are the extents directly.
+      if (r.right > wantW) wantW = r.right;
+      if (r.bottom > wantH) wantH = r.bottom;
+    }
+    // The panels are positioned against the wrapper, so sizing it after
+    // measuring would move them — except that every one of them is anchored to
+    // an edge or a corner, and a box that only grows keeps those anchors where
+    // they were. The measurement is therefore stable across calls.
+    el.style.width = `${wantW}px`;
+    el.style.height = `${wantH}px`;
     el.style.transform = prev;
 
     // Both axes, smaller ratio wins: the whole layout stays visible,
@@ -6680,9 +6692,9 @@ async function restoreTabs() {
     const scale = Math.min(window.innerWidth / wantW,
                            window.innerHeight / wantH);
     el.style.transform = `scale(${scale})`;
-    // The wrapper fills the viewport, so without this the body could scroll
-    // the unscaled layout into view. Hidden: the scaled result is what should
-    // be on screen and nothing more.
+    // The wrapper is now the layout's size, which is larger than the screen,
+    // so the body would scroll the unscaled layout into view. Hidden: the
+    // scaled result is what should be on screen and nothing more.
     document.body.style.overflow = "hidden";
     // 3Dmol sized its canvas from the container before the transform existed.
     // A transform does not change the layout box, so the canvas is still the
