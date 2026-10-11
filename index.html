@@ -124,44 +124,6 @@
     white-space: nowrap;
   }
 
-  /* ---------- portrait guidance ---------- */
-  /* Hidden by default and shown by the script only in portrait, so a desktop
-     never sees it. Positioned above the status pill rather than at the top:
-     the top bar is where the user is already looking for controls, and this
-     is not a control — it is a suggestion, and it should not sit where a
-     control would be. */
-  #rotate-hint {
-    position: absolute;
-    bottom: 64px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 20;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    background: rgba(19, 26, 34, .92);
-    border: 1px solid rgba(77, 163, 255, .35);
-    border-radius: 999px;
-    padding: 8px 10px 8px 16px;
-    font-size: 12px;
-    color: var(--text);
-    box-shadow: 0 8px 28px rgba(0, 0, 0, .5);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-  }
-  #rotate-hint[hidden] { display: none; }
-  #rotate-hint svg { color: var(--accent); flex-shrink: 0; }
-  #rotate-hint-close {
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-size: 17px;
-    line-height: 1;
-    cursor: pointer;
-    padding: 2px 6px;
-    border-radius: 6px;
-  }
-  #rotate-hint-close:hover { color: var(--text); background: rgba(255,255,255,.07); }
 
   /* ---------- top bar ---------- */
   #topbar {
@@ -244,42 +206,6 @@
      falls on whichever of them is longest. */
   #structure-label .src { color: var(--accent); flex-shrink: 0; }
 
-  /* ---------- the drawer's handle (phone only) ---------- */
-  /* Hidden on desktop: the left column is always open there, so a button that
-     opens it would do nothing. Shown by the script only when the portrait
-     layout applies.
-
-     Positioned to the left of the structure label, which is where the thing
-     it opens lives. 44px square — the minimum touch target both platforms
-     specify, and the reason it is not simply an icon in the top bar. */
-  #drawer-btn {
-    position: absolute;
-    top: 14px;
-    left: 12px;
-    z-index: 22;
-    width: 44px;
-    height: 44px;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    background: rgba(19, 26, 34, .82);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    color: var(--text);
-    cursor: pointer;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-  }
-  #drawer-btn[hidden] { display: none; }
-  #drawer-btn:hover { border-color: var(--accent); color: var(--accent); }
-  /* While the drawer is open the handle becomes the close affordance, so it
-     stays where the user last touched and moves with the drawer's edge. */
-  #drawer-btn.on {
-    left: calc(min(320px, 86%) + 4px);
-    background: var(--accent);
-    color: #04121f;
-    border-color: var(--accent);
-  }
 
   /* ---------- metrics panel ---------- */
   /* ---------- left column: metrics + sequence ---------- */
@@ -304,40 +230,98 @@
   }
   #left-col:empty { display: none; }
 
-  /* ---------- the left column's three panels, each foldable ---------- */
-  /* A fold button in each panel's title bar. The three panels stack in one
-     column and between them they are taller than the screen on a laptop, so
-     being able to put two of them away is the difference between using them
-     and scrolling past them.
+  /* ---------- the two panels, as bottom sheets ---------- */
+  /* Both the left column and the agent panel start closed and open as a sheet
+     over the bottom of the screen.
 
-     The button is the last child of the title bar and the title bars are flex
-     rows, so it sits at the right edge without any positioning of its own. */
-  .fold {
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1;
-    cursor: pointer;
-    padding: 0 2px;
-    margin-left: auto;
-    flex-shrink: 0;
+     They are the two things that compete with the structure for space. Three
+     columns across a 390px phone leaves the structure a card-sized slit, and
+     every attempt to make the columns narrower just made their contents
+     unreadable. A sheet over the bottom gives the content the full width of
+     the screen and keeps the structure visible above it — and on a phone the
+     bottom of the screen is where a thumb already is.
+
+     Closed means translated down out of sight and `visibility: hidden`, so
+     nothing inside can be tabbed to or scrolled while it is shut. The
+     transition is on the transform, which the compositor handles; `visibility`
+     flips at the end so the sheet does not vanish mid-slide. */
+  #left-col, #agent-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    /* Above the status pill, which sits at the bottom and must stay reachable
+       while a sheet is open. */
+    padding-bottom: 56px;
+    border-radius: 16px 16px 0 0;
+    transform: translateY(101%);
+    visibility: hidden;
+    transition: transform .24s ease, visibility .24s;
+    z-index: 30;
   }
-  .fold:hover { color: var(--text); }
-  /* Folded: the panel keeps its title bar and loses its body. `display: none`
-     rather than a height animation, because the bodies are scroll containers
-     whose height is set by flex — animating that means animating a value the
-     layout owns, and the result is a jump rather than a slide. */
-  #metrics.folded #metrics-rows,
-  #metrics.folded .m-notes,
-  #seq-panel.folded .seq-body,
-  #selection.folded .s-tools,
-  #selection.folded #sel-list { display: none; }
-  /* The title bars are not all flex rows — #metrics .m-title is a plain block
-     — so the button needs pulling to the right there. */
-  #metrics .m-title { display: flex; align-items: center; }
-  #metrics.folded .m-title { margin-bottom: 0; }
-  #seq-panel.folded .seq-head { margin-bottom: 0; }
+  #left-col.open, #agent-panel.open {
+    transform: translateY(0);
+    visibility: visible;
+  }
+  /* The sheet is as tall as its content up to a cap, so a short panel does not
+     become a tall empty box and a long one still scrolls. */
+  #left-col { max-height: 72%; overflow-y: auto; }
+  #agent-panel { max-height: 78%; }
+
+  /* The handles. Top of the screen, beside the structure name: that is where
+     the user is already looking, and the bottom is where the sheets appear —
+     a handle down there would be covered by the thing it opens. */
+  #left-handle, #agent-handle {
+    position: absolute;
+    top: 14px;
+    z-index: 22;
+    width: 40px;
+    height: 40px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(19, 26, 34, .82);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    color: var(--text);
+    cursor: pointer;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  #left-handle { left: 12px; }
+  #agent-handle { right: 12px; }
+  #left-handle[hidden], #agent-handle[hidden] { display: none; }
+  #left-handle:hover, #agent-handle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  /* While a sheet is open its handle is the close affordance, so it stays lit
+     rather than looking inert. */
+  #left-handle.on, #agent-handle.on {
+    background: var(--accent);
+    color: #04121f;
+    border-color: var(--accent);
+  }
+  /* A sheet open means the other one is shut — two sheets over each other is
+     not a thing anyone wants. The idle handle dims rather than hides, so the
+     user can still see that the other panel exists. */
+  #left-handle.dim, #agent-handle.dim { opacity: .45; }
+
+  /* The panels' own fold buttons are gone: the sheet is the fold. A button
+     inside a sheet that closes the sheet would be a second way to do one
+     thing, and the handle is already where the user's thumb is. */
+  .fold { display: none; }
+
+  /* The sheet's content is laid out for a narrow column on the desktop; at full
+     screen width it reads better as rows. */
+  #left-col.open #metrics,
+  #left-col.open #seq-panel,
+  #left-col.open #selection { margin: 0 12px 10px; }
+  #left-col.open #metrics:first-child { margin-top: 12px; }
 
   #metrics {
     background: rgba(19,26,34,.78);
@@ -1797,47 +1781,37 @@
   </div>
 </div>
 
-<!-- Portrait guidance. Shown only in portrait, and only until the phone is
-     turned.
-
-     The viewer is three columns across and a portrait phone is a third of
-     that wide. Rotating the page with a CSS transform was the first attempt
-     and it is not this: it works, but the address bar ends up on the side and
-     a page that has physically turned when the phone has not reads as broken.
-     Asking is both simpler and more honest — the user turns the phone, which
-     is a gesture they already know, and the interface they get is the one
-     that was designed rather than a transformed one.
-
-     Dismissible, because a user who wants to stay in portrait should be able
-     to: the layout below still works, it is only tighter. The choice is kept
-     in sessionStorage so it survives a reload but not a new visit. -->
-<div id="rotate-hint" hidden>
-  <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
-       stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
-       aria-hidden="true">
-    <!-- A phone, turned. The arc is the gesture being asked for. -->
-    <rect x="7" y="3" width="10" height="18" rx="2.2"/>
-    <path d="M3.5 8.5 A 8.5 8.5 0 0 1 8.5 3.5" opacity=".55"/>
-    <path d="M20.5 15.5 A 8.5 8.5 0 0 1 15.5 20.5" opacity=".55"/>
-  </svg>
-  <span>横屏观看更佳</span>
-  <button id="rotate-hint-close" type="button" title="知道了">×</button>
-</div>
 
 <div id="structure-label"><span id="struct-switcher"></span></div>
 
-<!-- The drawer's handle. Hidden on desktop, where the left column is always
-     open and there is nothing to open. On a phone it is the only way to reach
-     the metrics, the sequence and the selection — which is why it sits beside
-     the structure name rather than in the top bar: it is about what is on
-     screen, not about how it is drawn. -->
-<button id="drawer-btn" type="button" title="指标与序列" hidden>
-  <svg viewBox="0 0 24 24" width="17" height="17" fill="none"
+<!-- Two handles for the two panels, both of which live at the bottom of the
+     screen when open.
+
+     The left column and the agent panel are the two things that compete with
+     the structure for space, and on a small screen they win too often: three
+     columns across a 390px phone leaves the structure a card-sized slit. So
+     both start closed and both open as a sheet over the bottom of the screen,
+     where there is room for their content and where a thumb can reach them.
+
+     The handles sit at the top, beside the structure name, because that is
+     where the user is already looking and because the bottom of the screen is
+     where the sheets appear — a handle at the bottom would be covered by the
+     thing it opens. -->
+<button id="left-handle" type="button" title="指标与序列">
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none"
        stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
        aria-hidden="true">
     <path d="M4 7h16M4 12h16M4 17h10"/>
   </svg>
 </button>
+<button id="agent-handle" type="button" title="对话">
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none"
+       stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+       stroke-linejoin="round" aria-hidden="true">
+    <path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z"/>
+  </svg>
+</button>
+
 
 <div id="topbar">
     <select id="style-picker" class="ctl" disabled>
@@ -1889,7 +1863,7 @@
 
 <div id="left-col">
   <div id="metrics">
-    <div class="m-title">Metrics<button class="fold" type="button" data-fold="metrics" title="收起">−</button></div>
+    <div class="m-title">Metrics</div>
     <div id="metrics-rows"></div>
     <div class="m-notes" id="metrics-notes"></div>
   </div>
@@ -1898,7 +1872,6 @@
     <div class="seq-head">
       <span id="seq-title">Sequence</span>
       <span id="seq-len"></span>
-      <button class="fold" type="button" data-fold="seq" title="收起">−</button>
     </div>
     <div class="seq-body" id="seq-body"></div>
   </div>
@@ -1907,7 +1880,6 @@
     <div class="s-head">
       <span>Selection</span>
       <button class="s-clear" id="sel-clear">clear all</button>
-      <button class="fold" type="button" data-fold="sel" title="收起">−</button>
     </div>
     <div class="s-tools">
       <span class="s-mode" id="sel-mode" title="What a click selects: a residue, a whole chain, a single atom, or a bond">
@@ -6645,52 +6617,87 @@ async function restoreTabs() {
 // relationships between them, just little. Nothing overlaps because nothing
 // moved.
 //
-// The left column's three panels fold, and start folded.
+// The two panels are bottom sheets, both closed on arrival.
 //
-// Metrics, sequence and selection stack in one column and together they are
-// taller than a laptop screen. On a phone, scaled down to a third of their
-// size, they are taller still — and the one thing the user opened the page to
-// see is behind them. So two of the three start closed and any of them can be
-// opened or closed from its title bar.
+// The left column and the agent panel are the two things that compete with the
+// structure for space, and on a small screen they win too often: three columns
+// across a 390px phone leaves the structure a card-sized slit. So both start
+// closed and both open as a sheet over the bottom of the screen, where there is
+// room for their content at full width and where a thumb already is.
 //
-// Which two: the sequence and the selection. Metrics is the shortest and the
-// most often wanted — it says what the structure on screen actually is — so it
-// stays open. The sequence is the longest by far, a full residue list, and the
-// selection is empty until the user clicks something, so an open one is a
-// panel saying "nothing selected" at length.
+// One sheet at a time. Two sheets over each other is not a thing anyone wants,
+// and the one underneath would be unreachable rather than merely hidden — so
+// opening one closes the other. The closed handle dims instead of hiding, so
+// the user can still see that the other panel exists.
 //
-// The choice is not persisted. It is a starting state, not a preference: a user
-// who opens the sequence and reloads is in the middle of reading it, and
-// silently closing it would be the page undoing something they did.
-(function foldLeftPanels() {
-  const panels = {
-    metrics: document.getElementById("metrics"),
-    seq: document.getElementById("seq-panel"),
-    sel: document.getElementById("selection"),
+// Tapping the stage closes whatever is open, for the same reason a dropdown
+// closes on a click outside it: a sheet covering the thing you were looking at
+// should get out of the way on a tap anywhere else.
+(function bottomSheets() {
+  const sheets = {
+    left: {
+      panel: document.getElementById("left-col"),
+      handle: document.getElementById("left-handle"),
+    },
+    agent: {
+      panel: document.getElementById("agent-panel"),
+      handle: document.getElementById("agent-handle"),
+    },
   };
-  // The two that start closed. Metrics stays open — see above.
-  const START_FOLDED = ["seq", "sel"];
 
-  const setFolded = (key, folded) => {
-    const el = panels[key];
-    if (!el) return;
-    el.classList.toggle("folded", folded);
-    const btn = el.querySelector(".fold");
-    if (btn) {
-      btn.textContent = folded ? "+" : "−";
-      btn.title = folded ? "展开" : "收起";
+  const setOpen = (key, open) => {
+    const s = sheets[key];
+    if (!s || !s.panel || !s.handle) return;
+    s.panel.classList.toggle("open", open);
+    s.handle.classList.toggle("on", open);
+    // The other sheet closes, and its handle dims to say so.
+    for (const k of Object.keys(sheets)) {
+      if (k === key) continue;
+      const o = sheets[k];
+      if (!o.panel || !o.handle) continue;
+      o.panel.classList.remove("open");
+      o.handle.classList.remove("on");
+      o.handle.classList.toggle("dim", open);
+    }
+    if (!open) {
+      // Nothing open: neither handle is dimmed.
+      Object.values(sheets).forEach(o => o.handle && o.handle.classList.remove("dim"));
     }
   };
 
-  document.querySelectorAll(".fold").forEach(btn => {
-    const key = btn.dataset.fold;
-    if (!key || !panels[key]) return;
-    btn.addEventListener("click", () => {
-      setFolded(key, !panels[key].classList.contains("folded"));
+  Object.entries(sheets).forEach(([key, s]) => {
+    if (!s.handle) return;
+    s.handle.addEventListener("click", () => {
+      setOpen(key, !s.panel.classList.contains("open"));
     });
   });
 
-  START_FOLDED.forEach(k => setFolded(k, true));
+  // A tap on the stage closes the open sheet. The viewer's own click handler is
+  // untouched — this only acts when a sheet is open, so a tap that selects a
+  // residue while both are shut behaves exactly as before.
+  document.getElementById("viewer-wrap").addEventListener("click", () => {
+    const open = Object.keys(sheets).find(
+      k => sheets[k].panel && sheets[k].panel.classList.contains("open"));
+    if (open) setOpen(open, false);
+  });
+
+  // The handles only exist on a small screen. On a desktop the panels are
+  // always open in place and there is nothing to open.
+  const mq = window.matchMedia("(max-width: 1023px)");
+  const apply = () => {
+    const small = mq.matches;
+    Object.values(sheets).forEach(s => {
+      if (s.handle) s.handle.hidden = !small;
+    });
+    if (!small) {
+      // Back to the desktop layout: both panels open in place, no sheets.
+      Object.values(sheets).forEach(s => {
+        if (s.panel) s.panel.classList.remove("open");
+      });
+    }
+  };
+  if (mq.addEventListener) mq.addEventListener("change", apply);
+  apply();
 })();
 
 // Why a wrapper rather than scaling `body`: `body` is the containing block for
