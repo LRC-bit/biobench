@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BioBench 横屏诊断</title>
+<style>
+body{background:#0b0f14;color:#e6edf3;font:14px/1.6 monospace;padding:16px;margin:0}
+h2{color:#4da3ff;font-size:15px;margin:16px 0 6px}
+.v{color:#7ee787}.w{color:#fbbf24}.e{color:#f87171}
+table{border-collapse:collapse;width:100%;margin:4px 0}
+td{border:1px solid #223040;padding:5px 8px}
+td:first-child{color:#8b949e;width:42%}
+button{background:#1f6feb;color:#fff;border:0;border-radius:6px;padding:10px 16px;font-size:14px;margin:4px 4px 4px 0}
+</style></head><body>
+<h2>把手机转成横屏，然后看下面的数字</h2>
+<div id="out">测量中…</div>
+<button onclick="go()">重新测量</button>
+<button onclick="location.reload()">刷新页面</button>
+<h2>直接打开 viewer</h2>
+<button onclick="location.href='./index.html'">打开 BioBench</button>
+<script>
+function go(){
+  const w=document.querySelector('#bb-scale');
+  const lc=document.querySelector('#left-col');
+  const o=[];
+  const row=(k,v,cls)=>{o.push(`<tr><td>${k}</td><td class="${cls||''}">${v}</td></tr>`)};
+  row('屏幕宽 × 高 (innerWidth × innerHeight)', innerWidth+' × '+innerHeight, 'v');
+  row('devicePixelRatio', devicePixelRatio);
+  row('orientation', screen.orientation? screen.orientation.type : '?');
+  row('媒体查询 (max-width:1023px) 匹配', matchMedia('(max-width: 1023px)').matches?'是 → 手机布局':'否 → 桌面三栏', matchMedia('(max-width: 1023px)').matches?'v':'e');
+  row('#bb-scale 存在', w?'是':'否', w?'v':'e');
+  if(w){
+    row('wrapper 宽 (style)', w.style.width);
+    row('wrapper 高 (style)', w.style.height);
+    row('wrapper transform', w.style.transform||'(无)');
+    const r=w.getBoundingClientRect();
+    row('wrapper 实际占屏', Math.round(r.width)+' × '+Math.round(r.height), Math.abs(r.width-innerWidth)<2?'v':'e');
+  }
+  if(lc){
+    const r=lc.getBoundingClientRect();
+    row('#left-col 宽', Math.round(r.width), Math.abs(r.width-innerWidth)<2?'v':'e');
+  }
+  const lh=document.querySelector('#left-handle');
+  if(lh) row('左把手 hidden', lh.hidden, lh.hidden?'w':'v');
+  document.querySelector('#out').innerHTML='<table>'+o.join('')+'</table>';
+}
+go();
+addEventListener('resize',()=>setTimeout(go,300));
+addEventListener('orientationchange',()=>setTimeout(go,600));
+</script></body></html>
