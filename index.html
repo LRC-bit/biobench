@@ -6660,6 +6660,21 @@ async function restoreTabs() {
   // disappear, and a scale computed against the wrong height sticks until the
   // next resize.
   requestAnimationFrame(apply);
+  // And again a beat later, because a phone that has just been turned does not
+  // always report its new size on the first frame. The orientationchange event
+  // fires before the browser has finished re-laying-out the visual viewport, so
+  // the first apply() after a rotation can read the old width — which leaves
+  // the wrapper at the portrait size on a landscape screen, the exact symptom
+  // of "turning it sideways changed nothing". A second pass on the next frame
+  // is after the browser has settled, and it is cheap.
+  requestAnimationFrame(() => requestAnimationFrame(apply));
+  // The visual viewport is the one that reflects what the user actually sees
+  // once the address bar starts sliding away, and it moves without a resize
+  // event on some phones. Watching it too costs nothing and closes the gap
+  // where the layout viewport still reports the pre-rotation size.
+  if (window.visualViewport && window.visualViewport.addEventListener) {
+    window.visualViewport.addEventListener("resize", apply);
+  }
 })();
 
 // Restore first, then start polling. Both are async and both touch the tab
