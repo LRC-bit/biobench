@@ -244,6 +244,43 @@
      falls on whichever of them is longest. */
   #structure-label .src { color: var(--accent); flex-shrink: 0; }
 
+  /* ---------- the drawer's handle (phone only) ---------- */
+  /* Hidden on desktop: the left column is always open there, so a button that
+     opens it would do nothing. Shown by the script only when the portrait
+     layout applies.
+
+     Positioned to the left of the structure label, which is where the thing
+     it opens lives. 44px square — the minimum touch target both platforms
+     specify, and the reason it is not simply an icon in the top bar. */
+  #drawer-btn {
+    position: absolute;
+    top: 14px;
+    left: 12px;
+    z-index: 22;
+    width: 44px;
+    height: 44px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(19, 26, 34, .82);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    cursor: pointer;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  #drawer-btn[hidden] { display: none; }
+  #drawer-btn:hover { border-color: var(--accent); color: var(--accent); }
+  /* While the drawer is open the handle becomes the close affordance, so it
+     stays where the user last touched and moves with the drawer's edge. */
+  #drawer-btn.on {
+    left: calc(min(320px, 86%) + 4px);
+    background: var(--accent);
+    color: #04121f;
+    border-color: var(--accent);
+  }
+
   /* ---------- metrics panel ---------- */
   /* ---------- left column: metrics + sequence ---------- */
   #left-col {
@@ -634,35 +671,91 @@
      The Screen Orientation API is still asked for, where it exists. It is a
      request the browser may refuse, and a refusal is fine: the notice is the
      fallback that always works. */
+  /* A phone in portrait: the structure gets the screen, everything else is a
+     drawer.
+
+     The desktop layout is three columns because a desktop has the width for
+     three. A portrait phone does not, and shrinking all three to fit is how
+     you get an interface where nothing is comfortable: a 130px column of
+     10px text, a 3D view the width of a business card, and touch targets
+     sized for a mouse.
+
+     So the phone gets one thing at a time. The structure fills the screen.
+     The left column becomes a drawer that slides over it, opened by a button
+     and closed by tapping the stage — the pattern every mobile app uses for
+     secondary panels. The agent panel is a tab until asked for, as it is in
+     landscape.
+
+     What this buys, concretely, on a 390x844 screen:
+       - the structure: 390px wide instead of ~150px
+       - touch targets: the drawer's rows are full-width, not 130px
+       - the top bar: one row of controls, not three columns of them
+
+     The drawer is `visibility`-toggled rather than `display`, so the panels
+     inside keep their scroll positions and their open/closed state while it
+     is shut — reopening it does not rebuild what was there. */
   @media (max-aspect-ratio: 3/4) and (max-width: 900px) {
-    /* The left column gives up width rather than sharing it evenly. In
-       portrait the structure is what survives, so the column takes the
-       smaller share and the stage takes the rest. */
+    /* The stage is the whole screen. Nothing is inset from it. */
     #left-col {
-      width: min(280px, 38%);
-      left: 8px;
-      top: 48px;
-      bottom: 48px;
-      gap: 7px;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: min(320px, 86%);
+      z-index: 25;
+      padding: 52px 0 16px;
+      gap: 8px;
+      /* Off-screen to the left, and invisible so nothing in it can be tapped
+         or tabbed to while it is shut. */
+      transform: translateX(-101%);
+      visibility: hidden;
+      transition: transform .22s ease, visibility .22s;
+      background: rgba(11, 15, 20, .96);
+      border-right: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
-    /* The panel is a tab until the user opens it. Collapsed by the script on
-       load; this only makes sure the tab sits inside a narrow screen. */
+    #left-col.open {
+      transform: translateX(0);
+      visibility: visible;
+    }
+    /* The agent panel is a tab, docked right, until it is opened. */
     #agent-panel {
       right: 8px;
       top: 48px;
+      bottom: 48px;
       min-width: 0;
+      z-index: 26;
     }
     #agent-panel:not(.collapsed) {
-      width: min(340px, 82%);
+      width: min(340px, 88%);
     }
-    /* Type down a step. These are the desktop sizes at 11-13px; on a 390px
-       screen a 13px line is a third of the column. */
-    #metrics, #seq-panel, #selection { font-size: 10px; }
-    #metrics .m-title, .seq-head, .s-head { font-size: 10px; }
-    #structure-label { font-size: 11px; }
-    #topbar { top: 8px; }
+    /* Type at the size a phone wants, not the size a 1080p monitor wants.
+       12px is the floor for body text on a phone; below it the eye starts
+       guessing at word shapes. */
+    #metrics, #seq-panel, #selection { font-size: 12px; }
+    #metrics .m-title, .seq-head, .s-head { font-size: 12px; }
+    #structure-label { font-size: 12px; }
+    #topbar {
+      top: 8px;
+      /* The bar is one row and it scrolls sideways if it must, rather than
+         wrapping into two rows that eat the screen. */
+      max-width: calc(100% - 16px);
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+    }
+    #topbar::-webkit-scrollbar { display: none; }
     #status-wrap { bottom: 12px; }
-    #status { padding: 6px 14px; font-size: 11px; }
+    #status { padding: 7px 15px; font-size: 12px; }
+    /* The drawer's rows are full-width and tall enough to hit with a thumb.
+       44px is the minimum both Apple and Google specify. */
+    #selection .s-row { padding: 11px 12px; min-height: 44px; }
+    .seq-row, #seq-panel .seq-row { min-height: 40px; }
+    /* The rotate hint sits above the status pill, and says the useful thing:
+       on an iPhone, where full screen is not available at all, the way to get
+       a chrome-free view is the home screen. */
+    #rotate-hint { bottom: 68px; font-size: 12px; }
   }
 
   /* Landscape, but a short one — a phone held sideways is ~400px tall. The
@@ -1754,6 +1847,19 @@
 
 <div id="structure-label"><span id="struct-switcher"></span></div>
 
+<!-- The drawer's handle. Hidden on desktop, where the left column is always
+     open and there is nothing to open. On a phone it is the only way to reach
+     the metrics, the sequence and the selection — which is why it sits beside
+     the structure name rather than in the top bar: it is about what is on
+     screen, not about how it is drawn. -->
+<button id="drawer-btn" type="button" title="指标与序列" hidden>
+  <svg viewBox="0 0 24 24" width="17" height="17" fill="none"
+       stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+       aria-hidden="true">
+    <path d="M4 7h16M4 12h16M4 17h10"/>
+  </svg>
+</button>
+
 <div id="topbar">
     <select id="style-picker" class="ctl" disabled>
       <option value="surface">Surface</option>
@@ -1831,6 +1937,25 @@
       </span>
     </div>
     <div id="sel-list"></div>
+
+    <!-- Full screen. A button rather than something the page does to itself,
+         because the browser allows nothing else: requestFullscreen() outside a
+         user gesture is refused every time, so a page that tries on load gets a
+         rejection in the console and no full screen. One tap is the whole cost,
+         and what it buys on a phone is the 80-100px the address bar and the
+         browser toolbar were taking.
+
+         Hidden where it cannot work — no Fullscreen API, or an iPhone, where
+         Safari has never supported it. On an iPhone the equivalent is "add to
+         home screen", which opens in a standalone window with no browser chrome
+         at all. -->
+    <button id="fs-btn" class="ctl" type="button" title="全屏观看" hidden>
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none"
+           stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+           stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>
+      </svg>
+    </button>
   </div>
 </div>
 
@@ -6466,9 +6591,33 @@ async function restoreTabs() {
 // request the browser may refuse — it needs fullscreen on iOS, and it fails
 // outright on desktop or when the user has a rotation lock on. A refusal is
 // fine; the notice is the fallback that always works.
-(function portraitGuidance() {
+// Portrait: the structure gets the screen, the left column becomes a drawer,
+// and the user is asked to turn the phone.
+//
+// Three things happen here and they are three separate problems:
+//
+//   1. The drawer. On a desktop the left column is always open because there
+//      is width for it. On a portrait phone there is not, and shrinking all
+//      three columns to fit is how you get an interface where nothing is
+//      comfortable. So the column slides off-screen and a handle brings it
+//      back over the structure — the pattern every mobile app uses for a
+//      secondary panel.
+//
+//   2. The agent panel starts collapsed. It is the widest of the three and
+//      the least needed at first glance.
+//
+//   3. A notice asks for landscape, because a phone sideways is the layout
+//      this was designed for. Not a forced rotation — the page stays as it is
+//      and the user turns the phone, which is a gesture they already know.
+//
+// The drawer is closed by tapping the stage as well as by the handle, because
+// a panel that covers the thing you were looking at should get out of the way
+// on a tap anywhere outside itself.
+(function portraitLayout() {
   const hint = document.getElementById("rotate-hint");
   const closeBtn = document.getElementById("rotate-hint-close");
+  const drawerBtn = document.getElementById("drawer-btn");
+  const leftCol = document.getElementById("left-col");
   // Matched on the aspect ratio rather than on `orientation`, because the two
   // are not the same question. `orientation: portrait` is what the browser
   // believes the device is; a desktop window narrowed to 400px is landscape by
@@ -6484,11 +6633,23 @@ async function restoreTabs() {
 
   const isPortrait = () => mq.matches;
 
+  const setDrawer = (open) => {
+    leftCol.classList.toggle("open", open);
+    drawerBtn.classList.toggle("on", open);
+    drawerBtn.title = open ? "收起" : "指标与序列";
+  };
+
   const apply = () => {
     if (!isPortrait()) {
+      // Back to the desktop layout: the column is open by definition there,
+      // and neither the handle nor the notice has anything to do.
       hint.hidden = true;
+      drawerBtn.hidden = true;
+      leftCol.classList.remove("open");
+      drawerBtn.classList.remove("on");
       return;
     }
+    drawerBtn.hidden = false;
     let dismissed = false;
     try { dismissed = sessionStorage.getItem(DISMISSED) === "1"; } catch (e) {}
     hint.hidden = dismissed;
@@ -6503,6 +6664,18 @@ async function restoreTabs() {
     agentCollapse.title = "展开面板";
   }
 
+  drawerBtn.addEventListener("click", () => {
+    setDrawer(!leftCol.classList.contains("open"));
+  });
+
+  // A tap on the stage closes the drawer. The viewer's own click handler is
+  // not touched — this listens on the wrap and only acts when the drawer is
+  // open, so a tap that selects a residue while it is shut behaves exactly as
+  // before.
+  document.getElementById("viewer-wrap").addEventListener("click", () => {
+    if (leftCol.classList.contains("open")) setDrawer(false);
+  });
+
   closeBtn.addEventListener("click", () => {
     hint.hidden = true;
     try { sessionStorage.setItem(DISMISSED, "1"); } catch (e) {}
@@ -6510,26 +6683,61 @@ async function restoreTabs() {
 
   if (mq.addEventListener) mq.addEventListener("change", apply);
   apply();
+})();
 
-  // Ask the device to turn, where it will let us. Fullscreen first, because
-  // some platforms only grant the lock from a fullscreen context — and
-  // because a fullscreen landscape view is what the user wants anyway. A
-  // rejection is silent: the notice above is the answer.
-  const lock = () => {
-    try {
-      const so = screen.orientation;
-      if (so && typeof so.lock === "function") {
-        Promise.resolve(so.lock("landscape")).catch(() => {});
-      }
-    } catch (e) { /* not supported */ }
+// The full-screen button.
+//
+// A button, not something the page does on load. requestFullscreen() outside a
+// user gesture is refused by every browser — the earlier version called it
+// during load and got a silent rejection, which is why nothing ever went full
+// screen. One tap is the whole cost, and on a phone it buys back the 80-100px
+// the address bar and browser toolbar were taking.
+//
+// The button is hidden where the API is missing, and on iPhone, where Safari
+// has never implemented it. There the equivalent is "add to home screen",
+// which opens the page in a standalone window with no browser chrome at all —
+// the rotate hint says so, because that is the only route to the same result.
+(function fullScreenButton() {
+  const btn = document.getElementById("fs-btn");
+  const el = document.documentElement;
+  const iPhone = /iPhone|iPod/.test(navigator.userAgent);
+
+  const supported = el.requestFullscreen || el.webkitRequestFullscreen;
+  if (!supported || iPhone) return;   // nothing this button could do
+  btn.hidden = false;
+
+  const isFull = () => !!(document.fullscreenElement ||
+                          document.webkitFullscreenElement);
+
+  // The icon is the same four corners in both states; the label and the
+  // rotation say which way it will go. Redrawing a second SVG for the exit
+  // state would be two icons doing one job.
+  const sync = () => {
+    btn.title = isFull() ? "退出全屏" : "全屏观看";
+    btn.classList.toggle("on", isFull());
   };
-  if (isPortrait()) {
-    if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen().then(lock, lock);
+
+  btn.addEventListener("click", () => {
+    if (isFull()) {
+      (document.exitFullscreen || document.webkitExitFullscreen).call(document);
     } else {
-      lock();
+      // Locking landscape is attempted only once full screen is granted. The
+      // lock needs a fullscreen context on the platforms that have it at all,
+      // and asking before that is a guaranteed rejection.
+      supported.call(el).then(() => {
+        try {
+          const so = screen.orientation;
+          if (so && typeof so.lock === "function") {
+            Promise.resolve(so.lock("landscape")).catch(() => {});
+          }
+        } catch (e) { /* not supported; the rotate hint covers it */ }
+      }, () => { /* refused; the page stays as it is */ });
     }
-  }
+  });
+
+  document.addEventListener("fullscreenchange", sync);
+  document.addEventListener("webkitfullscreenchange", sync);
+  sync();
 })();
 
 // Restore first, then start polling. Both are async and both touch the tab
