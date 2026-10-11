@@ -304,6 +304,41 @@
   }
   #left-col:empty { display: none; }
 
+  /* ---------- the left column's three panels, each foldable ---------- */
+  /* A fold button in each panel's title bar. The three panels stack in one
+     column and between them they are taller than the screen on a laptop, so
+     being able to put two of them away is the difference between using them
+     and scrolling past them.
+
+     The button is the last child of the title bar and the title bars are flex
+     rows, so it sits at the right edge without any positioning of its own. */
+  .fold {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 2px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+  .fold:hover { color: var(--text); }
+  /* Folded: the panel keeps its title bar and loses its body. `display: none`
+     rather than a height animation, because the bodies are scroll containers
+     whose height is set by flex — animating that means animating a value the
+     layout owns, and the result is a jump rather than a slide. */
+  #metrics.folded #metrics-rows,
+  #metrics.folded .m-notes,
+  #seq-panel.folded .seq-body,
+  #selection.folded .s-tools,
+  #selection.folded #sel-list { display: none; }
+  /* The title bars are not all flex rows — #metrics .m-title is a plain block
+     — so the button needs pulling to the right there. */
+  #metrics .m-title { display: flex; align-items: center; }
+  #metrics.folded .m-title { margin-bottom: 0; }
+  #seq-panel.folded .seq-head { margin-bottom: 0; }
+
   #metrics {
     background: rgba(19,26,34,.78);
     border: 1px solid rgba(34,48,64,.9);
@@ -1854,7 +1889,7 @@
 
 <div id="left-col">
   <div id="metrics">
-    <div class="m-title">Metrics</div>
+    <div class="m-title">Metrics<button class="fold" type="button" data-fold="metrics" title="收起">−</button></div>
     <div id="metrics-rows"></div>
     <div class="m-notes" id="metrics-notes"></div>
   </div>
@@ -1863,6 +1898,7 @@
     <div class="seq-head">
       <span id="seq-title">Sequence</span>
       <span id="seq-len"></span>
+      <button class="fold" type="button" data-fold="seq" title="收起">−</button>
     </div>
     <div class="seq-body" id="seq-body"></div>
   </div>
@@ -1871,6 +1907,7 @@
     <div class="s-head">
       <span>Selection</span>
       <button class="s-clear" id="sel-clear">clear all</button>
+      <button class="fold" type="button" data-fold="sel" title="收起">−</button>
     </div>
     <div class="s-tools">
       <span class="s-mode" id="sel-mode" title="What a click selects: a residue, a whole chain, a single atom, or a bond">
@@ -6608,6 +6645,54 @@ async function restoreTabs() {
 // relationships between them, just little. Nothing overlaps because nothing
 // moved.
 //
+// The left column's three panels fold, and start folded.
+//
+// Metrics, sequence and selection stack in one column and together they are
+// taller than a laptop screen. On a phone, scaled down to a third of their
+// size, they are taller still — and the one thing the user opened the page to
+// see is behind them. So two of the three start closed and any of them can be
+// opened or closed from its title bar.
+//
+// Which two: the sequence and the selection. Metrics is the shortest and the
+// most often wanted — it says what the structure on screen actually is — so it
+// stays open. The sequence is the longest by far, a full residue list, and the
+// selection is empty until the user clicks something, so an open one is a
+// panel saying "nothing selected" at length.
+//
+// The choice is not persisted. It is a starting state, not a preference: a user
+// who opens the sequence and reloads is in the middle of reading it, and
+// silently closing it would be the page undoing something they did.
+(function foldLeftPanels() {
+  const panels = {
+    metrics: document.getElementById("metrics"),
+    seq: document.getElementById("seq-panel"),
+    sel: document.getElementById("selection"),
+  };
+  // The two that start closed. Metrics stays open — see above.
+  const START_FOLDED = ["seq", "sel"];
+
+  const setFolded = (key, folded) => {
+    const el = panels[key];
+    if (!el) return;
+    el.classList.toggle("folded", folded);
+    const btn = el.querySelector(".fold");
+    if (btn) {
+      btn.textContent = folded ? "+" : "−";
+      btn.title = folded ? "展开" : "收起";
+    }
+  };
+
+  document.querySelectorAll(".fold").forEach(btn => {
+    const key = btn.dataset.fold;
+    if (!key || !panels[key]) return;
+    btn.addEventListener("click", () => {
+      setFolded(key, !panels[key].classList.contains("folded"));
+    });
+  });
+
+  START_FOLDED.forEach(k => setFolded(k, true));
+})();
+
 // Why a wrapper rather than scaling `body`: `body` is the containing block for
 // every absolutely-positioned panel, and a transform on it would make those
 // panels' `position: absolute` resolve against the transformed box. Scaling a
@@ -6620,6 +6705,13 @@ async function restoreTabs() {
   // Below this width the desktop layout is scaled rather than re-flowed. Above
   // it the page is the page and no transform is involved.
   const NARROW = "(max-width: 1023px)";
+  // The height the layout is given. Not measured — see the note in apply() for
+  // why measuring it feeds back on itself. 900 is the height the desktop layout
+  // is comfortable at: the columns are anchored 58px from the top and the
+  // bottom, which at 900 leaves 784px of column, and the status pill sits 22px
+  // above the bottom edge. A shorter screen than this is scaled to fit; a
+  // taller one is not stretched, because there is nothing to stretch.
+  const MIN_H = 900;
 
   const mq = window.matchMedia(NARROW);
   let wrapper = null;
@@ -6653,44 +6745,43 @@ async function restoreTabs() {
       return;
     }
     const el = build();
-    // Measure the layout by measuring its panels, not the wrapper.
+    // Measure the layout's width from its panels; take the height from a
+    // fixed floor.
     //
-    // The wrapper starts at the viewport's size, and its children are all
-    // `position: absolute` — out of flow, so they push neither the wrapper's
-    // scroll size nor its box. Reading the wrapper tells us about the screen,
-    // not about the layout, and a scale computed from it comes out as 1.0:
-    // the panels keep their desktop pixel sizes and run off the edges of a
-    // 390px screen. That is what put the status pill out of sight.
+    // The wrapper starts at the viewport's size and its children are all
+    // `position: absolute` — out of flow, so they push neither its scroll size
+    // nor its box. Reading the wrapper tells us about the screen, not about the
+    // layout, and a scale computed from it comes out as 1.0: the panels keep
+    // their desktop pixel sizes and run off the edges of a 390px screen. That
+    // is what put the status pill out of sight.
     //
-    // So the extent is taken from the panels themselves, and then *given* to
-    // the wrapper. Each panel is measured with getBoundingClientRect while the
-    // transform is cleared — a scaled element reports its scaled rect — and
-    // the furthest right and bottom edges win. The wrapper is then sized to
-    // that, which makes it a real box the panels were laid out in rather than
-    // a window they overflow.
+    // Width is measured, because it is the axis that actually varies — the
+    // panels' widths are what add up to the layout's extent, and none of them
+    // is anchored to the right edge in a way that feeds back.
+    //
+    // Height is *not* measured, and the reason is a feedback loop. Half the
+    // panels are positioned with `bottom`, so their rect.bottom is a function
+    // of the wrapper's current height. Sizing the wrapper to the measured
+    // bottom moves every `bottom` anchor, the next measurement comes back
+    // smaller, and the layout shrinks a little on every call until the status
+    // pill falls off the bottom of the screen. A fixed floor breaks the loop:
+    // the anchors resolve against a number that does not depend on them.
     const prev = el.style.transform;
     el.style.transform = "none";
-    let wantW = 0, wantH = 0;
+    let wantW = 0;
     for (const child of el.children) {
       const r = child.getBoundingClientRect();
-      // rect is viewport-relative and the wrapper sits at the origin, so the
-      // right and bottom edges are the extents directly.
       if (r.right > wantW) wantW = r.right;
-      if (r.bottom > wantH) wantH = r.bottom;
     }
-    // The panels are positioned against the wrapper, so sizing it after
-    // measuring would move them — except that every one of them is anchored to
-    // an edge or a corner, and a box that only grows keeps those anchors where
-    // they were. The measurement is therefore stable across calls.
     el.style.width = `${wantW}px`;
-    el.style.height = `${wantH}px`;
+    el.style.height = `${MIN_H}px`;
     el.style.transform = prev;
 
     // Both axes, smaller ratio wins: the whole layout stays visible,
     // letterboxed rather than cropped. A phone in landscape is wider than it
     // is tall relative to a three-column layout, so height usually binds.
     const scale = Math.min(window.innerWidth / wantW,
-                           window.innerHeight / wantH);
+                           window.innerHeight / MIN_H);
     el.style.transform = `scale(${scale})`;
     // The wrapper is now the layout's size, which is larger than the screen,
     // so the body would scroll the unscaled layout into view. Hidden: the
