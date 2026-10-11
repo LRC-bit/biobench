@@ -136,6 +136,56 @@
     align-items: center;
     gap: 8px;
   }
+  /* On a small screen the toolbar is a third bottom sheet, like the two
+     panels. It is 415px of controls on a 390px screen — it overflows both
+     edges and crowds the handles out of the corners — and every one of those
+     controls is a choice about the surround rather than something the user
+     reaches for while looking at the structure. As a sheet it gets the full
+     width, wraps onto as many rows as it needs, and leaves the top edge to
+     the three handles. */
+  @media (max-width: 1023px) {
+    #topbar {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: auto;
+      transform: translateY(101%);
+      visibility: hidden;
+      /* Same reason as the two panels: a translated box still hit-tests where
+         it was laid out, so the closed toolbar would cover the top of the
+         stage. */
+      pointer-events: none;
+      transition: transform .24s ease, visibility .24s;
+      z-index: 30;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px 14px 56px;
+      border-radius: 16px 16px 0 0;
+      background: rgba(13,18,25,.96);
+      border-top: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      max-height: 72%;
+      overflow-y: auto;
+    }
+    #topbar.open {
+      transform: translateY(0);
+      visibility: visible;
+      pointer-events: auto;
+    }
+    /* The controls are laid out for a toolbar row; in a sheet they are
+       targets, and a 26px-tall pill is under the 44px a thumb needs. */
+    #topbar .ctl {
+      font-size: 14px;
+      padding: 10px 34px 10px 16px;
+      min-height: 40px;
+    }
+    #topbar .ctl.icon {
+      padding: 10px;
+      min-width: 40px;
+    }
+  }
   .ctl {
     appearance: none;
     -webkit-appearance: none;
@@ -224,12 +274,20 @@
     border-radius: 16px 16px 0 0;
     transform: translateY(101%);
     visibility: hidden;
+    /* A closed sheet is translated out of sight, but a transform moves the box
+       visually and leaves it where it was for hit-testing — so the invisible
+       panel still covered the bottom of the stage and swallowed every tap
+       meant for the structure. `visibility: hidden` alone does not help: it
+       hides the content, not the box. This takes the box out of hit-testing
+       too, and the open state puts it back. */
+    pointer-events: none;
     transition: transform .24s ease, visibility .24s;
     z-index: 30;
   }
   #left-col.open, #agent-panel.open {
     transform: translateY(0);
     visibility: visible;
+    pointer-events: auto;
   }
   /* The sheet is as tall as its content up to a cap, so a short panel does not
      become a tall empty box and a long one still scrolls. */
@@ -239,7 +297,7 @@
   /* The handles. Top of the screen, in the two corners: the topbar is centred
      and leaves both edges free, and the bottom is where the sheets appear —
      a handle down there would be covered by the thing it opens. */
-  #left-handle, #agent-handle {
+  #left-handle, #agent-handle, #view-handle {
     position: absolute;
     top: 14px;
     z-index: 22;
@@ -261,17 +319,32 @@
     -webkit-backdrop-filter: blur(14px);
   }
   /* Shown only where the script has cleared `hidden` — a small screen. */
-  #left-handle:not([hidden]), #agent-handle:not([hidden]) { display: flex; }
+  #left-handle:not([hidden]), #agent-handle:not([hidden]),
+  #view-handle:not([hidden]) { display: flex; }
   #left-handle { left: 12px; }
   #agent-handle { right: 12px; }
-  #left-handle[hidden], #agent-handle[hidden] { display: none; }
-  #left-handle:hover, #agent-handle:hover {
+  /* Centred between the other two. The toolbar it opens was centred on the
+     desktop, and the handle keeps that position — the middle of the top edge
+     is the one spot that is neither corner.
+
+     Centred with a transform rather than `left:50%` plus a negative margin:
+     the wrapper is scaled, and a percentage left resolves against the
+     wrapper's own width while the margin is a fixed length that gets scaled
+     with it — the two disagree and the handle lands off screen. A transform
+     is applied after layout, so it moves the box by exactly half its own
+     width wherever that width put it. */
+  #view-handle {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  #left-handle[hidden], #agent-handle[hidden], #view-handle[hidden] { display: none; }
+  #left-handle:hover, #agent-handle:hover, #view-handle:hover {
     border-color: var(--accent);
     color: var(--accent);
   }
   /* While a sheet is open its handle is the close affordance, so it stays lit
      rather than looking inert. */
-  #left-handle.on, #agent-handle.on {
+  #left-handle.on, #agent-handle.on, #view-handle.on {
     background: var(--accent);
     color: #04121f;
     border-color: var(--accent);
@@ -279,7 +352,7 @@
   /* A sheet open means the other one is shut — two sheets over each other is
      not a thing anyone wants. The idle handle dims rather than hides, so the
      user can still see that the other panel exists. */
-  #left-handle.dim, #agent-handle.dim { opacity: .45; }
+  #left-handle.dim, #agent-handle.dim, #view-handle.dim { opacity: .45; }
 
   /* The panels' own fold buttons are gone: the sheet is the fold. A button
      inside a sheet that closes the sheet would be a second way to do one
@@ -1677,6 +1750,20 @@
        stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
        stroke-linejoin="round" aria-hidden="true">
     <path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z"/>
+  </svg>
+</button>
+
+<!-- The third handle, for the view controls. It sits centred between the
+     other two because the toolbar it opens is the one thing up here that is
+     neither the structure's numbers nor a conversation with the model — it
+     is the surround, and it belongs in the middle of the screen the way it
+     belonged in the middle of the toolbar. -->
+<button id="view-handle" type="button" title="视图与背景">
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none"
+       stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+       stroke-linejoin="round" aria-hidden="true">
+    <path d="M12 4.5C7 4.5 2.7 7.6 1 12c1.7 4.4 6 7.5 11 7.5s9.3-3.1 11-7.5c-1.7-4.4-6-7.5-11-7.5z"/>
+    <circle cx="12" cy="12" r="3"/>
   </svg>
 </button>
 
@@ -6360,6 +6447,11 @@ async function restoreTabs() {
 // closed and both open as a sheet over the bottom of the screen, where there is
 // room for their content at full width and where a thumb already is.
 //
+// The toolbar is the third. It is 415px of controls on a 390px screen, so it
+// overflows both edges and pushes the handles out of the corners — and every
+// control in it is a choice about the surround, not something reached for while
+// looking at the structure. Same treatment: a sheet, full width, wrapping.
+//
 // One sheet at a time. Two sheets over each other is not a thing anyone wants,
 // and the one underneath would be unreachable rather than merely hidden — so
 // opening one closes the other. The closed handle dims instead of hiding, so
@@ -6377,6 +6469,10 @@ async function restoreTabs() {
     agent: {
       panel: document.getElementById("agent-panel"),
       handle: document.getElementById("agent-handle"),
+    },
+    view: {
+      panel: document.getElementById("topbar"),
+      handle: document.getElementById("view-handle"),
     },
   };
 
@@ -6410,10 +6506,26 @@ async function restoreTabs() {
   // A tap on the stage closes the open sheet. The viewer's own click handler is
   // untouched — this only acts when a sheet is open, so a tap that selects a
   // residue while both are shut behaves exactly as before.
-  document.getElementById("viewer-wrap").addEventListener("click", () => {
+  //
+  // Listened on the document rather than on #viewer-wrap, because 3Dmol's
+  // canvas swallows the click: it binds its own handler for picking atoms and
+  // the event never reaches the wrapper. A document listener still sees it,
+  // since the canvas is a descendant. The sheets themselves are excluded by
+  // checking the target — a click inside an open sheet is a click on its
+  // content, not a request to close it.
+  document.addEventListener("click", ev => {
     const open = Object.keys(sheets).find(
       k => sheets[k].panel && sheets[k].panel.classList.contains("open"));
-    if (open) setOpen(open, false);
+    if (!open) return;
+    // A click on the open sheet's own content, or on any handle, is not a
+    // request to close. The handles have their own listener that toggles.
+    //
+    // Only the open sheet is checked. A closed one is `pointer-events: none`,
+    // so it can no longer be the target of a tap meant for the stage — which
+    // is what makes this test correct rather than merely sufficient.
+    if (sheets[open].panel.contains(ev.target)) return;
+    if (ev.target.closest && ev.target.closest("button[id$='-handle']")) return;
+    setOpen(open, false);
   });
 
   // The handles only exist on a small screen. On a desktop the panels are
