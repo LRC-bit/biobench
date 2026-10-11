@@ -124,6 +124,45 @@
     white-space: nowrap;
   }
 
+  /* ---------- portrait guidance ---------- */
+  /* Hidden by default and shown by the script only in portrait, so a desktop
+     never sees it. Positioned above the status pill rather than at the top:
+     the top bar is where the user is already looking for controls, and this
+     is not a control — it is a suggestion, and it should not sit where a
+     control would be. */
+  #rotate-hint {
+    position: absolute;
+    bottom: 64px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    background: rgba(19, 26, 34, .92);
+    border: 1px solid rgba(77, 163, 255, .35);
+    border-radius: 999px;
+    padding: 8px 10px 8px 16px;
+    font-size: 12px;
+    color: var(--text);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, .5);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  #rotate-hint[hidden] { display: none; }
+  #rotate-hint svg { color: var(--accent); flex-shrink: 0; }
+  #rotate-hint-close {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 6px;
+  }
+  #rotate-hint-close:hover { color: var(--text); background: rgba(255,255,255,.07); }
+
   /* ---------- top bar ---------- */
   #topbar {
     position: absolute;
@@ -574,62 +613,56 @@
      These come after the desktop rules on purpose. CSS lets the later rule
      win, so a media query placed before the block it is meant to override is
      overridden by it and does nothing at all. */
-  /* A phone in portrait is rotated into landscape rather than re-laid-out.
+  /* A phone in portrait is asked to turn, not turned by force.
      
      The viewer is a three-across workspace: structure in the middle, metrics
      and sequence on the left, the agent panel on the right. At 390px wide
      there is no arrangement of that which is not cramped — the columns would
      take 125px each and leave a 100px slit for the thing being looked at.
      
-     So the page is turned instead. `body` is rotated 90 degrees and sized to
-     the viewport's *long* axis, which makes a portrait phone present exactly
-     the landscape layout it was built for, full-bleed. The transform-origin
-     is the top-left corner and the translate moves the rotated box back into
-     view; without it the content swings off to the right and below.
+     Rotating the page with a transform was tried and is not what this does.
+     It works, but it fights the user: the address bar ends up on the side,
+     the browser's own rotate prompt appears over it, and a page that has
+     physically turned when the phone has not reads as broken rather than as
+     guidance. So the page stays as it is and says what it wants.
      
-     This is the same trick a native app uses when it declares
-     UIRequiresFullsScreen or locks orientation, done in CSS because a web
-     page cannot lock the sensor on every platform. Where the Screen
-     Orientation API is available the script asks for landscape first, and
-     this rule is what covers the rest — and the case where the user has a
-     rotation lock on, which the API cannot override.
+     What it does instead: the agent panel starts collapsed, so the portrait
+     screen is the structure plus the left column rather than three things
+     competing; and a notice asks for landscape, which the user can satisfy
+     by turning the phone — the one gesture that needs no explanation.
      
-     Everything inside keeps its desktop geometry: the columns, the gutters
-     and the type sizes are the ones tuned for a wide screen, because after
-     the rotation that is what this is. */
-  @media (orientation: portrait) and (max-width: 900px) {
-    /* The page is turned on its top-left corner and then slid back into
-       view. Both halves are one transform, because a transform is applied
-       right-to-left: rotate first, then translate in the *rotated* frame.
-
-       After rotate(90deg) with a top-left origin the box occupies
-       x:[-100vw, 0] y:[0, 100vh] — it has swung off to the left. The
-       rotated frame's Y axis now points right along the screen, so
-       translateY(-100%) moves it right by its own height, which is 100vw,
-       landing it exactly on x:[0, 100vw]. Filled, no gap, no overflow.
-
-       translateX(-100vh) looks equivalent and is not: the rotated X axis
-       points up the screen, so that slides the page off the top. The sign
-       and the axis both have to be worked out, which is why this comment
-       exists.
-
-       `left: 100vh` would also position it, but `vh` on a phone is the
-       *dynamic* viewport height — the one that grows when the address bar
-       slides away. A layout position read from it re-resolves mid-scroll and
-       the page jumps; a transform is computed once and does not. */
-    html, body {
-      width: 100vh;
-      height: 100vw;
-      overflow: hidden;
+     The Screen Orientation API is still asked for, where it exists. It is a
+     request the browser may refuse, and a refusal is fine: the notice is the
+     fallback that always works. */
+  @media (max-aspect-ratio: 3/4) and (max-width: 900px) {
+    /* The left column gives up width rather than sharing it evenly. In
+       portrait the structure is what survives, so the column takes the
+       smaller share and the stage takes the rest. */
+    #left-col {
+      width: min(280px, 38%);
+      left: 8px;
+      top: 48px;
+      bottom: 48px;
+      gap: 7px;
     }
-    body {
-      transform: rotate(90deg) translateY(-100%);
-      transform-origin: top left;
-      position: absolute;
-      top: 0;
-      left: 0;
-      margin: 0;
+    /* The panel is a tab until the user opens it. Collapsed by the script on
+       load; this only makes sure the tab sits inside a narrow screen. */
+    #agent-panel {
+      right: 8px;
+      top: 48px;
+      min-width: 0;
     }
+    #agent-panel:not(.collapsed) {
+      width: min(340px, 82%);
+    }
+    /* Type down a step. These are the desktop sizes at 11-13px; on a 390px
+       screen a 13px line is a third of the column. */
+    #metrics, #seq-panel, #selection { font-size: 10px; }
+    #metrics .m-title, .seq-head, .s-head { font-size: 10px; }
+    #structure-label { font-size: 11px; }
+    #topbar { top: 8px; }
+    #status-wrap { bottom: 12px; }
+    #status { padding: 6px 14px; font-size: 11px; }
   }
 
   /* Landscape, but a short one — a phone held sideways is ~400px tall. The
@@ -1690,6 +1723,33 @@
       <span>结构对比</span>
     </div>
   </div>
+</div>
+
+<!-- Portrait guidance. Shown only in portrait, and only until the phone is
+     turned.
+
+     The viewer is three columns across and a portrait phone is a third of
+     that wide. Rotating the page with a CSS transform was the first attempt
+     and it is not this: it works, but the address bar ends up on the side and
+     a page that has physically turned when the phone has not reads as broken.
+     Asking is both simpler and more honest — the user turns the phone, which
+     is a gesture they already know, and the interface they get is the one
+     that was designed rather than a transformed one.
+
+     Dismissible, because a user who wants to stay in portrait should be able
+     to: the layout below still works, it is only tighter. The choice is kept
+     in sessionStorage so it survives a reload but not a new visit. -->
+<div id="rotate-hint" hidden>
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+       stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+       aria-hidden="true">
+    <!-- A phone, turned. The arc is the gesture being asked for. -->
+    <rect x="7" y="3" width="10" height="18" rx="2.2"/>
+    <path d="M3.5 8.5 A 8.5 8.5 0 0 1 8.5 3.5" opacity=".55"/>
+    <path d="M20.5 15.5 A 8.5 8.5 0 0 1 15.5 20.5" opacity=".55"/>
+  </svg>
+  <span>横屏观看更佳</span>
+  <button id="rotate-hint-close" type="button" title="知道了">×</button>
 </div>
 
 <div id="structure-label"><span id="struct-switcher"></span></div>
@@ -6388,39 +6448,87 @@ async function restoreTabs() {
   } catch (e) { /* no archive yet */ }
 }
 
-// Ask for landscape, and fall back to the CSS rotation when refused.
+// Portrait: fold the agent panel away and ask for landscape.
 //
-// The viewer is a three-across workspace and a portrait phone has no room for
-// it. Where the Screen Orientation API exists it is asked first — that turns
-// the whole device, which is what the user expects and what keeps the touch
-// coordinates honest. It is a request, not a command: it needs a fullscreen
-// context on iOS, and it fails outright on a desktop browser or when the user
-// has a rotation lock on. Both of those are covered by the `orientation:
-// portrait` rule in the stylesheet, which rotates the page itself.
+// The viewer is three columns across and a portrait phone is a third of that
+// wide. Two things make the narrow screen usable rather than merely small:
 //
-// The two are not redundant. The API gives a real landscape screen; the CSS
-// gives a landscape-shaped page on a portrait screen. Whichever applies, the
-// result is the same layout.
-(function askLandscape() {
+//   1. The agent panel starts collapsed. It is the widest of the three and
+//      the least needed at first glance — the structure and the metrics are
+//      what the page was opened for. Collapsed it is a tab, and the tab opens
+//      it on demand.
+//
+//   2. A notice asks for landscape. Not a forced rotation: the page stays as
+//      it is and the user turns the phone, which is a gesture they already
+//      know and which yields the interface that was actually designed.
+//
+// The Screen Orientation API is asked for too, where it exists. It is a
+// request the browser may refuse — it needs fullscreen on iOS, and it fails
+// outright on desktop or when the user has a rotation lock on. A refusal is
+// fine; the notice is the fallback that always works.
+(function portraitGuidance() {
+  const hint = document.getElementById("rotate-hint");
+  const closeBtn = document.getElementById("rotate-hint-close");
+  // Matched on the aspect ratio rather than on `orientation`, because the two
+  // are not the same question. `orientation: portrait` is what the browser
+  // believes the device is; a desktop window narrowed to 400px is landscape by
+  // that definition and portrait by every measure that matters to this layout.
+  // The ratio is the thing the layout actually cares about, so it is what is
+  // asked.
+  const mq = window.matchMedia("(max-aspect-ratio: 3/4) and (max-width: 900px)");
+
+  // Remembered per tab, not forever. A user who dismissed it once should not
+  // be nagged on every reload of the same visit, but the next visit starts
+  // fresh — the advice is still correct, they may simply have forgotten.
+  const DISMISSED = "biobench.rotate-hint.dismissed";
+
+  const isPortrait = () => mq.matches;
+
+  const apply = () => {
+    if (!isPortrait()) {
+      hint.hidden = true;
+      return;
+    }
+    let dismissed = false;
+    try { dismissed = sessionStorage.getItem(DISMISSED) === "1"; } catch (e) {}
+    hint.hidden = dismissed;
+  };
+
+  // Collapse on arrival, and only on arrival. Re-collapsing on every
+  // orientation change would fight a user who deliberately opened the panel
+  // in portrait and then nudged the phone.
+  if (isPortrait()) {
+    agentPanel.classList.add("collapsed");
+    agentCollapse.textContent = "‹";
+    agentCollapse.title = "展开面板";
+  }
+
+  closeBtn.addEventListener("click", () => {
+    hint.hidden = true;
+    try { sessionStorage.setItem(DISMISSED, "1"); } catch (e) {}
+  });
+
+  if (mq.addEventListener) mq.addEventListener("change", apply);
+  apply();
+
+  // Ask the device to turn, where it will let us. Fullscreen first, because
+  // some platforms only grant the lock from a fullscreen context — and
+  // because a fullscreen landscape view is what the user wants anyway. A
+  // rejection is silent: the notice above is the answer.
   const lock = () => {
     try {
       const so = screen.orientation;
       if (so && typeof so.lock === "function") {
-        // lock() rejects rather than throwing, and an unhandled rejection is
-        // noise in the console for something that is only an optimisation.
         Promise.resolve(so.lock("landscape")).catch(() => {});
       }
-    } catch (e) { /* not supported; the CSS rotation covers it */ }
+    } catch (e) { /* not supported */ }
   };
-
-  // Some platforms only grant the lock from a fullscreen element, and some
-  // only after a user gesture. Requesting fullscreen first covers the former;
-  // the latter is left alone, because grabbing fullscreen from a gesture the
-  // user did not give for that purpose is worse than a rotated page.
-  if (document.documentElement.requestFullscreen) {
-    document.documentElement.requestFullscreen().then(lock, lock);
-  } else {
-    lock();
+  if (isPortrait()) {
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().then(lock, lock);
+    } else {
+      lock();
+    }
   }
 })();
 
