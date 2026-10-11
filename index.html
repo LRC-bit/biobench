@@ -720,14 +720,16 @@
       visibility: visible;
     }
     /* The agent panel is a tab, docked right, until it is opened. */
-    #agent-panel {
+    /* The agent panel is a tab, docked right, until it is opened. Only the
+       open state is given a height here — `:not(.collapsed)` keeps the
+       collapsed rule's `bottom: auto` working, so a folded panel is a tab at
+       the top-right rather than a full-height column with nothing in it. */
+    #agent-panel:not(.collapsed) {
       right: 8px;
       top: 48px;
       bottom: 48px;
       min-width: 0;
       z-index: 26;
-    }
-    #agent-panel:not(.collapsed) {
       width: min(340px, 88%);
     }
     /* Type at the size a phone wants, not the size a 1080p monitor wants.
@@ -763,13 +765,47 @@
      which leaves under 300px of column: enough for the metrics and a couple
      of chat lines, and nothing else. Tightening the gutters buys most of it
      back, and the type comes down a notch so the panels still read. */
+  /* A phone sideways is short and narrow at once: ~390px tall, 670-850 wide.
+     Two things have to give, and they are not the same two things.
+
+     Height: the columns are anchored to 58px top and bottom on the desktop,
+     which on a 390px screen leaves under 300px of column — the metrics and a
+     couple of chat lines, nothing else. The gutters tighten.
+
+     Width: the control bar is the real problem. It holds six controls and
+     measures about 700px, and it is centred — so on a 700px screen it runs
+     off both ends, over the left column on one side and the agent panel on
+     the other. That is the "scrambled" look: three boxes claiming the same
+     strip of screen.
+
+     The fix is to stop centring it. Left-aligned, capped to the gap between
+     the two columns, and scrollable sideways when it still does not fit —
+     which is what a phone does with a toolbar it cannot fit, and what the
+     user already knows how to use. Centring a fixed-width bar only works when
+     the screen is wider than the bar. */
   @media (max-height: 480px) {
-    #left-col, #agent-panel { top: 44px; bottom: 44px; }
-    #topbar { top: 8px; }
+    /* The columns start below the structure label rather than beside it. On
+       the desktop the label sits in the top-left corner and the column starts
+       level with it, because there is height to spare. On a 390px screen
+       there is not, and the label would otherwise cover the metrics panel's
+       title bar. So the label takes its own row and the columns start under
+       it — which costs 30px of column and buys a layout where nothing is
+       covered. */
+    #left-col, #agent-panel { top: 86px; bottom: 44px; }
     #status-wrap { bottom: 12px; }
     #status { padding: 6px 14px; font-size: 11px; }
     #left-col { width: min(300px, 30%); left: 8px; gap: 7px; }
-    #agent-panel { width: min(320px, 32%); min-width: 210px; right: 8px; }
+    /* The panel's open width, and only its open width. `:not(.collapsed)`
+       matters: the collapsed rule sets `bottom: auto` so the panel is a tab
+       rather than a full-height column, and a plain `#agent-panel` rule here
+       would override that — CSS lets the later rule win, and this block is
+       later. The panel would then be a tab with a column's height, showing
+       its header floating a third of the way down the screen. */
+    #agent-panel:not(.collapsed) {
+      width: min(320px, 32%);
+      min-width: 210px;
+      right: 8px;
+    }
     /* The panels' own text, one step down. These are the sizes the desktop
        uses at 11-13px; on a 400px-tall screen a 13px line is a sixth of the
        column. */
@@ -778,14 +814,53 @@
     .ag-log { font-size: 10px; }
     .ag-input { font-size: 11px; }
     #structure-label { font-size: 11px; }
+
+    /* Left-aligned, not centred, and no wider than the gap it has to live
+       in. The gap is the screen minus both columns and their margins; at
+       30% and 32% that is about 38% of the width, which on a 700px screen is
+       ~266px — enough for two controls, with the rest a swipe away. */
+    #topbar {
+      top: 8px;
+      left: 8px;
+      transform: none;
+      max-width: calc(100% - 16px);
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+      /* A toolbar that scrolls needs to look like it scrolls, or the controls
+         past the edge are simply missing as far as the user knows. */
+      -webkit-overflow-scrolling: touch;
+      mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 14px), transparent 100%);
+    }
+    #topbar::-webkit-scrollbar { display: none; }
+    /* The structure label shares the top strip with the bar now that the bar
+       is left-aligned, so it moves below it rather than under it. */
+    #structure-label { top: 52px; left: 8px; max-width: calc(100% - 16px); }
   }
 
   /* A narrow landscape — a small phone sideways, or a large phone with the
      keyboard up. Same idea as the short one: the columns give up width so
      the structure keeps some. */
   @media (orientation: landscape) and (max-width: 740px) {
-    #left-col { width: min(260px, 30%); left: 8px; }
-    #agent-panel { width: min(280px, 32%); min-width: 200px; right: 8px; }
+    #left-col { width: min(260px, 30%); left: 8px; top: 86px; }
+    /* `:not(.collapsed)` for the same reason as above: the collapsed rule has
+       to stay able to make this a tab. */
+    #agent-panel:not(.collapsed) {
+      width: min(280px, 32%);
+      min-width: 200px;
+      right: 8px;
+      top: 86px;
+    }
+    #topbar {
+      left: 8px;
+      transform: none;
+      max-width: calc(100% - 16px);
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+    }
+    #topbar::-webkit-scrollbar { display: none; }
+    #structure-label { top: 52px; left: 8px; max-width: calc(100% - 16px); }
   }
 
   #agent-panel .ag-head {
@@ -6658,7 +6733,17 @@ async function restoreTabs() {
   // Collapse on arrival, and only on arrival. Re-collapsing on every
   // orientation change would fight a user who deliberately opened the panel
   // in portrait and then nudged the phone.
-  if (isPortrait()) {
+  // The agent panel starts folded on any small screen, portrait or landscape.
+  //
+  // It is the widest of the three columns and the least needed at first
+  // glance — the page was opened to look at a structure. Folded it is a tab
+  // against the right edge, and on a 390px-tall landscape screen folding it
+  // takes the 3D view from ~300px to ~570px wide, which is the difference
+  // between a structure you can read and one you can barely see.
+  //
+  // Only on arrival. Re-folding on every resize would fight a user who opened
+  // the panel and then nudged the phone.
+  if (isPortrait() || window.matchMedia("(max-height: 480px)").matches) {
     agentPanel.classList.add("collapsed");
     agentCollapse.textContent = "‹";
     agentCollapse.title = "展开面板";
