@@ -705,11 +705,11 @@
      
      So the layout is left exactly as it is and the whole thing is scaled down.
      `#bb-scale` is a wrapper the script puts around everything in the body;
-     this rule gives it the desktop's pixel size and a transform-origin at the
-     top left, and the script sets the scale itself from the ratio between the
-     screen and that size. A 390x844 phone held sideways gets the 1440x900
-     desktop layout at 0.46x — small, as asked for, and *proportionally* small:
-     the same layout, the same relationships, nothing overlapping anything.
+     the script measures how wide and tall the layout actually is and scales it
+     to fit the screen. A phone held sideways gets the desktop layout at
+     whatever fraction of its size fits — small, as asked for, and
+     *proportionally* small: the same layout, the same relationships, nothing
+     overlapping anything.
      
      The scale is a transform, so it costs nothing at layout time and the
      browser composites it on the GPU. What it does not do is reflow text, so
@@ -719,19 +719,18 @@
      the page is the page and no transform is involved. */
   @media (max-width: 1023px) {
     html, body { overflow: hidden; }
-    /* The wrapper is the desktop's size, positioned at the origin. The scale
-       itself is set by the script, because it depends on the viewport and a
-       stylesheet cannot divide by it. */
+    /* The wrapper fills the viewport and its children lay out inside it as
+       they always did. No fixed pixel size here: the layout's own extent is
+       whatever the panels add up to, and hard-coding a number would be a
+       second place to keep in step with the first. The script measures the
+       wrapper's real box and scales from that. */
     #bb-scale {
       position: absolute;
       top: 0;
       left: 0;
       transform-origin: top left;
-      /* The desktop layout's design size. A fixed number, not the viewport's:
-         that is what makes the scale one division rather than something that
-         chases a resizing window. */
-      width: 1440px;
-      height: 900px;
+      width: 100%;
+      height: 100%;
     }
   }
 
@@ -6620,10 +6619,8 @@ async function restoreTabs() {
 // load — the first computation can land before the canvas has its final size,
 // which would leave 3Dmol drawing at the wrong scale until the next resize.
 (function scaleToFit() {
-  // The desktop layout's design size, matching the CSS. A phone in landscape
-  // is compared against this; a desktop wider than 1023px never enters the
-  // branch at all and the wrapper is removed.
-  const DESIGN_W = 1440, DESIGN_H = 900;
+  // Below this width the desktop layout is scaled rather than re-flowed. Above
+  // it the page is the page and no transform is involved.
   const NARROW = "(max-width: 1023px)";
 
   const mq = window.matchMedia(NARROW);
@@ -6658,16 +6655,34 @@ async function restoreTabs() {
       return;
     }
     const el = build();
-    // Both axes are considered and the smaller ratio wins, so the whole design
-    // is always visible — letterboxed rather than cropped. A phone in landscape
-    // is wider than it is tall relative to 1440x900, so height is usually the
-    // binding constraint.
-    const scale = Math.min(window.innerWidth / DESIGN_W,
-                           window.innerHeight / DESIGN_H);
+    // Measure the layout, do not assume it.
+    //
+    // The wrapper is 100% of the viewport, so its own box is the screen and
+    // tells us nothing. What matters is how wide the layout *wants* to be —
+    // the panels are absolutely positioned, so they do not push the wrapper's
+    // scroll width, and the honest measure is the furthest right edge any of
+    // them reaches. scrollWidth is read with the transform cleared, because a
+    // scaled element reports its scaled size.
+    //
+    // A fixed design size was the first attempt and it is wrong twice over: it
+    // is a second place to keep in step with the CSS, and the height is a
+    // guess — the layout is as tall as its content, which changes when a panel
+    // opens.
+    const prev = el.style.transform;
+    el.style.transform = "none";
+    const wantW = Math.max(el.scrollWidth, el.clientWidth || 0);
+    const wantH = Math.max(el.scrollHeight, el.clientHeight || 0);
+    el.style.transform = prev;
+
+    // Both axes, smaller ratio wins: the whole layout stays visible,
+    // letterboxed rather than cropped. A phone in landscape is wider than it
+    // is tall relative to a three-column layout, so height usually binds.
+    const scale = Math.min(window.innerWidth / wantW,
+                           window.innerHeight / wantH);
     el.style.transform = `scale(${scale})`;
-    // The wrapper keeps its design size in the layout, so the body would
-    // otherwise be scrollable by the overflow. Hidden, because the scaled
-    // result is what should be on screen and nothing more.
+    // The wrapper fills the viewport, so without this the body could scroll
+    // the unscaled layout into view. Hidden: the scaled result is what should
+    // be on screen and nothing more.
     document.body.style.overflow = "hidden";
     // 3Dmol sized its canvas from the container before the transform existed.
     // A transform does not change the layout box, so the canvas is still the
